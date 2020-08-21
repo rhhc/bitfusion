@@ -139,7 +139,7 @@ def load_config():
             record = os.path.join(root, files)
             print("Item count in configuration set: %d" % len(result))
             result = load_record(record=record, result=result)
-            break
+            #break
     # reduce already profile one
     # convert to list and partition
     benchlist = list(result)

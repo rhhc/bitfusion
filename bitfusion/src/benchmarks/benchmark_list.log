@@ -1,0 +1,430 @@
+('Index', 100)
+Item count in configuration set: 0
+('torch.Size([1, 3, 224, 224]) torch.Size([32, 3, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 0)
+('torch.Size([1, 32, 112, 112]) torch.Size([32, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 32\n', 576)
+('torch.Size([1, 32, 112, 112]) torch.Size([16, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 288)
+('torch.Size([1, 16, 112, 112]) torch.Size([96, 16, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 864)
+('torch.Size([1, 96, 112, 112]) torch.Size([96, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 96\n', 5184)
+('torch.Size([1, 96, 56, 56]) torch.Size([24, 96, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1296)
+('torch.Size([1, 24, 56, 56]) torch.Size([144, 24, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1944)
+('torch.Size([1, 144, 56, 56]) torch.Size([144, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 144\n', 11664)
+('torch.Size([1, 144, 56, 56]) torch.Size([24, 144, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1944)
+('torch.Size([1, 24, 56, 56]) torch.Size([144, 24, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1944)
+('torch.Size([1, 144, 56, 56]) torch.Size([144, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 144\n', 11664)
+('torch.Size([1, 144, 28, 28]) torch.Size([32, 144, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 2592)
+('torch.Size([1, 32, 28, 28]) torch.Size([192, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 192, 28, 28]) torch.Size([192, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 192\n', 20736)
+('torch.Size([1, 192, 28, 28]) torch.Size([32, 192, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 32, 28, 28]) torch.Size([192, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 192, 28, 28]) torch.Size([192, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 192\n', 20736)
+('torch.Size([1, 192, 28, 28]) torch.Size([32, 192, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 32, 28, 28]) torch.Size([192, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 192, 28, 28]) torch.Size([192, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 192\n', 20736)
+('torch.Size([1, 192, 14, 14]) torch.Size([64, 192, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 6912)
+('torch.Size([1, 64, 14, 14]) torch.Size([384, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 384, 14, 14]) torch.Size([384, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 384\n', 82944)
+('torch.Size([1, 384, 14, 14]) torch.Size([64, 384, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 64, 14, 14]) torch.Size([384, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 384, 14, 14]) torch.Size([384, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 384\n', 82944)
+('torch.Size([1, 384, 14, 14]) torch.Size([64, 384, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 64, 14, 14]) torch.Size([384, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 384, 14, 14]) torch.Size([384, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 384\n', 82944)
+('torch.Size([1, 384, 14, 14]) torch.Size([64, 384, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 64, 14, 14]) torch.Size([384, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 384, 14, 14]) torch.Size([384, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 384\n', 82944)
+('torch.Size([1, 384, 14, 14]) torch.Size([96, 384, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 20736)
+('torch.Size([1, 96, 14, 14]) torch.Size([576, 96, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 576, 14, 14]) torch.Size([576, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 576\n', 186624)
+('torch.Size([1, 576, 14, 14]) torch.Size([96, 576, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 96, 14, 14]) torch.Size([576, 96, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 576, 14, 14]) torch.Size([576, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 576\n', 186624)
+('torch.Size([1, 576, 14, 14]) torch.Size([96, 576, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 96, 14, 14]) torch.Size([576, 96, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 576, 14, 14]) torch.Size([576, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 576\n', 186624)
+('torch.Size([1, 576, 7, 7]) torch.Size([160, 576, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 51840)
+('torch.Size([1, 160, 7, 7]) torch.Size([960, 160, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 960, 7, 7]) torch.Size([960, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 960\n', 518400)
+('torch.Size([1, 960, 7, 7]) torch.Size([160, 960, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 160, 7, 7]) torch.Size([960, 160, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 960, 7, 7]) torch.Size([960, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 960\n', 518400)
+('torch.Size([1, 960, 7, 7]) torch.Size([160, 960, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 160, 7, 7]) torch.Size([960, 160, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 960, 7, 7]) torch.Size([960, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 960\n', 518400)
+('torch.Size([1, 960, 7, 7]) torch.Size([320, 960, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 172800)
+('torch.Size([1, 320, 7, 7]) torch.Size([1280, 320, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 230400)
+Total configuration number (contains redundant) 3733272
+Item count in configuration set: 840168
+('torch.Size([1, 3, 224, 224]) torch.Size([32, 3, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 0)
+('torch.Size([1, 32, 112, 112]) torch.Size([32, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 32\n', 576)
+('torch.Size([1, 32, 112, 112]) torch.Size([64, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1152)
+('torch.Size([1, 64, 112, 112]) torch.Size([64, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 64\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([128, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 4608)
+('torch.Size([1, 128, 56, 56]) torch.Size([128, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 128\n', 9216)
+('torch.Size([1, 128, 56, 56]) torch.Size([128, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 56, 56]) torch.Size([128, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 128\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([256, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 18432)
+('torch.Size([1, 256, 28, 28]) torch.Size([256, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 256\n', 36864)
+('torch.Size([1, 256, 28, 28]) torch.Size([256, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 28, 28]) torch.Size([256, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 256\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([512, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 73728)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([1024, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 294912)
+('torch.Size([1, 1024, 7, 7]) torch.Size([1024, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1024\n', 589824)
+('torch.Size([1, 1024, 7, 7]) torch.Size([1024, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+Total configuration number (contains redundant) 3335616
+Item count in configuration set: 1690416
+('torch.Size([1, 3, 224, 224]) torch.Size([64, 3, 7, 7]) (7, 7) (2, 2) (3, 3) (1, 1) 1\n', 0)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([256, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 64, 56, 56]) torch.Size([256, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 256, 56, 56]) torch.Size([64, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([256, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 256, 56, 56]) torch.Size([64, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([256, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 256, 56, 56]) torch.Size([128, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 18432)
+('torch.Size([1, 128, 56, 56]) torch.Size([128, 128, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([512, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 56, 56]) torch.Size([512, 256, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 73728)
+('torch.Size([1, 512, 28, 28]) torch.Size([128, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([512, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 512, 28, 28]) torch.Size([128, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([512, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 512, 28, 28]) torch.Size([128, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([512, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 512, 28, 28]) torch.Size([256, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 73728)
+('torch.Size([1, 256, 28, 28]) torch.Size([256, 256, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 28, 28]) torch.Size([1024, 512, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 294912)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([512, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 294912)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([2048, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+('torch.Size([1, 1024, 14, 14]) torch.Size([2048, 1024, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 1179648)
+('torch.Size([1, 2048, 7, 7]) torch.Size([512, 2048, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([2048, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+('torch.Size([1, 2048, 7, 7]) torch.Size([512, 2048, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([2048, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+Total configuration number (contains redundant) 7529472
+Item count in configuration set: 7219152
+('torch.Size([1, 3, 224, 224]) torch.Size([64, 3, 7, 7]) (7, 7) (2, 2) (3, 3) (1, 1) 1\n', 0)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([128, 64, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 4608)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 64, 56, 56]) torch.Size([128, 64, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 4608)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([256, 128, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 18432)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 128, 28, 28]) torch.Size([256, 128, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 18432)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([512, 256, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 73728)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([512, 256, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 73728)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+Total configuration number (contains redundant) 783360
+Layer configuration number (reduce redundant): 3609576
+interval is being set to 72190
+benchlist with index 100 length: 152
+benchlist length is 152 in benchmarks.py
+('Index', 100)
+Item count in configuration set: 0
+('torch.Size([1, 3, 224, 224]) torch.Size([32, 3, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 0)
+('torch.Size([1, 32, 112, 112]) torch.Size([32, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 32\n', 576)
+('torch.Size([1, 32, 112, 112]) torch.Size([16, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 288)
+('torch.Size([1, 16, 112, 112]) torch.Size([96, 16, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 864)
+('torch.Size([1, 96, 112, 112]) torch.Size([96, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 96\n', 5184)
+('torch.Size([1, 96, 56, 56]) torch.Size([24, 96, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1296)
+('torch.Size([1, 24, 56, 56]) torch.Size([144, 24, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1944)
+('torch.Size([1, 144, 56, 56]) torch.Size([144, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 144\n', 11664)
+('torch.Size([1, 144, 56, 56]) torch.Size([24, 144, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1944)
+('torch.Size([1, 24, 56, 56]) torch.Size([144, 24, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1944)
+('torch.Size([1, 144, 56, 56]) torch.Size([144, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 144\n', 11664)
+('torch.Size([1, 144, 28, 28]) torch.Size([32, 144, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 2592)
+('torch.Size([1, 32, 28, 28]) torch.Size([192, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 192, 28, 28]) torch.Size([192, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 192\n', 20736)
+('torch.Size([1, 192, 28, 28]) torch.Size([32, 192, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 32, 28, 28]) torch.Size([192, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 192, 28, 28]) torch.Size([192, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 192\n', 20736)
+('torch.Size([1, 192, 28, 28]) torch.Size([32, 192, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 32, 28, 28]) torch.Size([192, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 3456)
+('torch.Size([1, 192, 28, 28]) torch.Size([192, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 192\n', 20736)
+('torch.Size([1, 192, 14, 14]) torch.Size([64, 192, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 6912)
+('torch.Size([1, 64, 14, 14]) torch.Size([384, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 384, 14, 14]) torch.Size([384, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 384\n', 82944)
+('torch.Size([1, 384, 14, 14]) torch.Size([64, 384, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 64, 14, 14]) torch.Size([384, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 384, 14, 14]) torch.Size([384, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 384\n', 82944)
+('torch.Size([1, 384, 14, 14]) torch.Size([64, 384, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 64, 14, 14]) torch.Size([384, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 384, 14, 14]) torch.Size([384, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 384\n', 82944)
+('torch.Size([1, 384, 14, 14]) torch.Size([64, 384, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 64, 14, 14]) torch.Size([384, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 13824)
+('torch.Size([1, 384, 14, 14]) torch.Size([384, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 384\n', 82944)
+('torch.Size([1, 384, 14, 14]) torch.Size([96, 384, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 20736)
+('torch.Size([1, 96, 14, 14]) torch.Size([576, 96, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 576, 14, 14]) torch.Size([576, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 576\n', 186624)
+('torch.Size([1, 576, 14, 14]) torch.Size([96, 576, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 96, 14, 14]) torch.Size([576, 96, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 576, 14, 14]) torch.Size([576, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 576\n', 186624)
+('torch.Size([1, 576, 14, 14]) torch.Size([96, 576, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 96, 14, 14]) torch.Size([576, 96, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 31104)
+('torch.Size([1, 576, 14, 14]) torch.Size([576, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 576\n', 186624)
+('torch.Size([1, 576, 7, 7]) torch.Size([160, 576, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 51840)
+('torch.Size([1, 160, 7, 7]) torch.Size([960, 160, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 960, 7, 7]) torch.Size([960, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 960\n', 518400)
+('torch.Size([1, 960, 7, 7]) torch.Size([160, 960, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 160, 7, 7]) torch.Size([960, 160, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 960, 7, 7]) torch.Size([960, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 960\n', 518400)
+('torch.Size([1, 960, 7, 7]) torch.Size([160, 960, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 160, 7, 7]) torch.Size([960, 160, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 86400)
+('torch.Size([1, 960, 7, 7]) torch.Size([960, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 960\n', 518400)
+('torch.Size([1, 960, 7, 7]) torch.Size([320, 960, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 172800)
+('torch.Size([1, 320, 7, 7]) torch.Size([1280, 320, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 230400)
+Total configuration number (contains redundant) 3733272
+Item count in configuration set: 840168
+('torch.Size([1, 3, 224, 224]) torch.Size([32, 3, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 0)
+('torch.Size([1, 32, 112, 112]) torch.Size([32, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 32\n', 576)
+('torch.Size([1, 32, 112, 112]) torch.Size([64, 32, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 1152)
+('torch.Size([1, 64, 112, 112]) torch.Size([64, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 64\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([128, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 4608)
+('torch.Size([1, 128, 56, 56]) torch.Size([128, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 128\n', 9216)
+('torch.Size([1, 128, 56, 56]) torch.Size([128, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 56, 56]) torch.Size([128, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 128\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([256, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 18432)
+('torch.Size([1, 256, 28, 28]) torch.Size([256, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 256\n', 36864)
+('torch.Size([1, 256, 28, 28]) torch.Size([256, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 28, 28]) torch.Size([256, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 256\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([512, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 73728)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 1, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 512\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([1024, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 294912)
+('torch.Size([1, 1024, 7, 7]) torch.Size([1024, 1, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1024\n', 589824)
+('torch.Size([1, 1024, 7, 7]) torch.Size([1024, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+Total configuration number (contains redundant) 3335616
+Item count in configuration set: 1690416
+('torch.Size([1, 3, 224, 224]) torch.Size([64, 3, 7, 7]) (7, 7) (2, 2) (3, 3) (1, 1) 1\n', 0)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([256, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 64, 56, 56]) torch.Size([256, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 256, 56, 56]) torch.Size([64, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([256, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 256, 56, 56]) torch.Size([64, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([256, 64, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 9216)
+('torch.Size([1, 256, 56, 56]) torch.Size([128, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 18432)
+('torch.Size([1, 128, 56, 56]) torch.Size([128, 128, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([512, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 56, 56]) torch.Size([512, 256, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 73728)
+('torch.Size([1, 512, 28, 28]) torch.Size([128, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([512, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 512, 28, 28]) torch.Size([128, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([512, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 512, 28, 28]) torch.Size([128, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([512, 128, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 36864)
+('torch.Size([1, 512, 28, 28]) torch.Size([256, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 73728)
+('torch.Size([1, 256, 28, 28]) torch.Size([256, 256, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 28, 28]) torch.Size([1024, 512, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 294912)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([256, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([1024, 256, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 147456)
+('torch.Size([1, 1024, 14, 14]) torch.Size([512, 1024, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 294912)
+('torch.Size([1, 512, 14, 14]) torch.Size([512, 512, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([2048, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+('torch.Size([1, 1024, 14, 14]) torch.Size([2048, 1024, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 1179648)
+('torch.Size([1, 2048, 7, 7]) torch.Size([512, 2048, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([2048, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+('torch.Size([1, 2048, 7, 7]) torch.Size([512, 2048, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([2048, 512, 1, 1]) (1, 1) (1, 1) (0, 0) (1, 1) 1\n', 589824)
+Total configuration number (contains redundant) 7529472
+Item count in configuration set: 7219152
+('torch.Size([1, 3, 224, 224]) torch.Size([64, 3, 7, 7]) (7, 7) (2, 2) (3, 3) (1, 1) 1\n', 0)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([64, 64, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 2304)
+('torch.Size([1, 64, 56, 56]) torch.Size([128, 64, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 4608)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 64, 56, 56]) torch.Size([128, 64, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 4608)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([128, 128, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 9216)
+('torch.Size([1, 128, 28, 28]) torch.Size([256, 128, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 18432)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 128, 28, 28]) torch.Size([256, 128, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 18432)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([256, 256, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 36864)
+('torch.Size([1, 256, 14, 14]) torch.Size([512, 256, 3, 3]) (3, 3) (2, 2) (1, 1) (1, 1) 1\n', 73728)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 256, 14, 14]) torch.Size([512, 256, 1, 1]) (1, 1) (2, 2) (0, 0) (1, 1) 1\n', 73728)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+('torch.Size([1, 512, 7, 7]) torch.Size([512, 512, 3, 3]) (3, 3) (1, 1) (1, 1) (1, 1) 1\n', 147456)
+Total configuration number (contains redundant) 783360
+Layer configuration number (reduce redundant): 3609576
+interval is being set to 72190
+benchlist with index 0 length: 72190
+benchlist with index 1 length: 72190
+benchlist with index 2 length: 72190
+benchlist with index 3 length: 72190
+benchlist with index 4 length: 72190
+benchlist with index 5 length: 72190
+benchlist with index 6 length: 72190
+benchlist with index 7 length: 72190
+benchlist with index 8 length: 72190
+benchlist with index 9 length: 72190
+benchlist with index 10 length: 72190
+benchlist with index 11 length: 72190
+benchlist with index 12 length: 72190
+benchlist with index 13 length: 72190
+benchlist with index 14 length: 72190
+benchlist with index 15 length: 72190
+benchlist with index 16 length: 72190
+benchlist with index 17 length: 72190
+benchlist with index 18 length: 72190
+benchlist with index 19 length: 72190
+benchlist with index 20 length: 72190
+benchlist with index 21 length: 72190
+benchlist with index 22 length: 72190
+benchlist with index 23 length: 72190
+benchlist with index 24 length: 72190
+benchlist with index 25 length: 72190
+benchlist with index 26 length: 72190
+benchlist with index 27 length: 72190
+benchlist with index 28 length: 72190
+benchlist with index 29 length: 72190
+benchlist with index 30 length: 72190
+benchlist with index 31 length: 72190
+benchlist with index 32 length: 72190
+benchlist with index 33 length: 72190
+benchlist with index 34 length: 72190
+benchlist with index 35 length: 72190
+benchlist with index 36 length: 72190
+benchlist with index 37 length: 72190
+benchlist with index 38 length: 72190
+benchlist with index 39 length: 72190
+benchlist with index 40 length: 72190
+benchlist with index 41 length: 72190
+benchlist with index 42 length: 72190
+benchlist with index 43 length: 72190
+benchlist with index 44 length: 72190
+benchlist with index 45 length: 72190
+benchlist with index 46 length: 72190
+benchlist with index 47 length: 72190
+benchlist with index 48 length: 72190
+benchlist with index 49 length: 72190
+benchlist with index 50 length: 72190
+benchlist with index 51 length: 72190
+benchlist with index 52 length: 72190
+benchlist with index 53 length: 72190
+benchlist with index 54 length: 72190
+benchlist with index 55 length: 72190
+benchlist with index 56 length: 72190
+benchlist with index 57 length: 72190
+benchlist with index 58 length: 72190
+benchlist with index 59 length: 72190
+benchlist with index 60 length: 72190
+benchlist with index 61 length: 72190
+benchlist with index 62 length: 72190
+benchlist with index 63 length: 72190
+benchlist with index 64 length: 72190
+benchlist with index 65 length: 72190
+benchlist with index 66 length: 72190
+benchlist with index 67 length: 72190
+benchlist with index 68 length: 72190
+benchlist with index 69 length: 72190
+benchlist with index 70 length: 72190
+benchlist with index 71 length: 72190
+benchlist with index 72 length: 72190
+benchlist with index 73 length: 72190
+benchlist with index 74 length: 72190
+benchlist with index 75 length: 72190
+benchlist with index 76 length: 72190
+benchlist with index 77 length: 72190
+benchlist with index 78 length: 72190
+benchlist with index 79 length: 72190
+benchlist with index 80 length: 72190
+benchlist with index 81 length: 72190
+benchlist with index 82 length: 72190
+benchlist with index 83 length: 72190
+benchlist with index 84 length: 72190
+benchlist with index 85 length: 72190
+benchlist with index 86 length: 72190
+benchlist with index 87 length: 72190
+benchlist with index 88 length: 72190
+benchlist with index 89 length: 72190
+benchlist with index 90 length: 72190
+benchlist with index 91 length: 72190
+benchlist with index 92 length: 72190
+benchlist with index 93 length: 72190
+benchlist with index 94 length: 72190
+benchlist with index 95 length: 72190
+benchlist with index 96 length: 72190
+benchlist with index 97 length: 72190
+benchlist with index 98 length: 72190
+benchlist with index 99 length: 72190
+benchlist with index 100 length: 152
+benchlist with index 101 length: 0
