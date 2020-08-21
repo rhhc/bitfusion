@@ -1,6 +1,6 @@
 import logging
 import math
-import ConfigParser
+import configparser as ConfigParser
 import numpy as np
 
 from bitfusion.src.utils.utils import ceil_a_by_b, log2, lookup_pandas_dataframe

@@ -59,10 +59,10 @@ if __name__ == "__main__":
     kmax = 4
 
     c_pipe = PipeStage(None, ck, None)
-    print c_pipe
+    print(c_pipe)
 
     k_pipe = Pipeline(c_pipe, rk, wk, kmax)
-    print k_pipe
+    print(k_pipe)
 
     rj = 5
     cj = ck
@@ -70,4 +70,4 @@ if __name__ == "__main__":
 
     jmax = 4
     j_pipe = Pipeline(k_pipe, rj, wj, jmax)
-    print j_pipe
+    print(j_pipe)

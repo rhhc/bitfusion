@@ -1,13 +1,12 @@
 import argparse
 import logging
+import os
 
 from dnnweaver2.graph import Graph, get_default_graph
-from dnnweaver2.tensorOps.cnn import conv2D, maxPool, flatten, matmul, addBias, batch_norm, reorg, concat, leakyReLU, add
+from dnnweaver2.tensorOps.cnn import conv2D, maxPool, flatten, matmul, addBias, batch_norm, reorg, concat, leakyReLU, add, globalAvgPool
 from dnnweaver2 import get_tensor
-import logging
 from dnnweaver2.scalar.dtypes import FQDtype, FixedPoint
 
-import os
 
 def fc(tensor_in, output_channels=1024,
         f_dtype=None, w_dtype=None,
@@ -28,11 +27,11 @@ def fc(tensor_in, output_channels=1024,
         with get_default_graph().name_scope(act):
             act = _fc
     else:
-        raise ValueError, 'Unknown activation type {}'.format(act)
+        raise ValueError('Unknown activation type {}'.format(act))
 
     return act
 
-def conv(tensor_in, filters=32, stride=None, kernel_size=3, pad='SAME',
+def conv(tensor_in, filters=32, stride=None, kernel_size=3, pad='SAME', group=1,
         c_dtype=None, w_dtype=None,
         act='linear'):
 
@@ -47,7 +46,7 @@ def conv(tensor_in, filters=32, stride=None, kernel_size=3, pad='SAME',
     biases = get_tensor(shape=(filters),
                          name='biases',
                          dtype=FixedPoint(32,w_dtype.frac_bits + tensor_in.dtype.frac_bits))
-    _conv = conv2D(tensor_in, weights, biases, stride=stride, pad=pad, dtype=c_dtype)
+    _conv = conv2D(tensor_in, weights, biases, stride=stride, pad=pad, group=group, dtype=c_dtype)
 
     if act == 'leakyReLU':
         with get_default_graph().name_scope(act):
@@ -56,20 +55,32 @@ def conv(tensor_in, filters=32, stride=None, kernel_size=3, pad='SAME',
         with get_default_graph().name_scope(act):
             act = _conv
     else:
-        raise ValueError, 'Unknown activation type {}'.format(act)
+        raise ValueError('Unknown activation type {}'.format(act))
 
     return act
 
 benchlist = [\
-             'AlexNet', \
-             'SVHN', \
-             'CIFAR10', \
-             'LeNet-5', \
-             'VGG-7', \
-             'RESNET-18', \
-             'RNN', \
-             'LSTM' \
+             #'AlexNet', \
+             #'SVHN', \
+             #'CIFAR10', \
+             #'LeNet-5', \
+             #'VGG-7', \
+             #'RESNET-18-twn', \
+             #'RESNET-18', \
+             #'RESNET-50', \
+             #'RNN', \
+             #'LSTM', \
+             #'Mobilenet-V1-4bit', \
+             #'Mobilenet-V1-8bit', \
+             #'Mobilenet-V2-8bit', \
             ]
+
+try:
+    import layer
+    benchlist += layer.benchlist
+    print("benchlist length is %d in benchmarks.py" % len(benchlist))
+except (NameError, IOError) as e:
+    print("layer.py import error", e)
 
 def get_bench_nn(bench_name, WRPN=False):
     if bench_name == 'AlexNet':
@@ -86,16 +97,28 @@ def get_bench_nn(bench_name, WRPN=False):
     elif bench_name == 'VGG-7':
         return get_vgg_7_twn()
     elif bench_name == 'RESNET-18':
+        return get_resnet_18()
+    elif bench_name == 'RESNET-18-twn':
         if WRPN:
             return get_resnet_18_wrpn()
         else:
             return get_resnet_18_twn()
+    elif bench_name == 'RESNET-50':
+        return get_resnet_50()
     elif bench_name == 'RESNET-20':
         return get_resnet_20_twn()
     elif bench_name == 'RNN':
         return get_RNN('RNN', 2048)
     elif bench_name == 'LSTM':
         return get_LSTM('LSTM', 900)
+    elif bench_name == 'Mobilenet-V1-4bit':
+        return get_mobilenet_v1_4bit()
+    elif bench_name == 'Mobilenet-V1-8bit':
+        return get_mobilenet_v1_8bit()
+    elif bench_name == 'Mobilenet-V2-8bit':
+        return get_mobilenet_v2_8bit()
+    elif 'base' in bench_name or 'layer' in bench_name:
+        return layer.get_bench_nn(bench_name)
 
 def write_to_csv(csv_name, fields, stats, graph, csv_path='./'):
     if not os.path.exists(csv_path):
@@ -713,12 +736,300 @@ def get_resnet_18_wrpn():
                             c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
     return g
 
+def get_resnet_18(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18
+    '''
+    g = Graph('ResNet-18', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    config = [2, 2, 2, 2]
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('conv_stem'):
+            conv_stem = conv(i, filters=64, kernel_size=7, pad='SAME', stride=(1,2,2,1),
+                    c_dtype=vl, w_dtype=vl)
+        with g.name_scope('pool_stem'):
+            pool_stem = maxPool(conv_stem, pooling_kernel=(1,2,2,1), stride=(1,2,2,1), pad='VALID')
+            prev = pool_stem
+
+        expansion = 1
+        inplanes = 64
+        for i, blocks in enumerate(config):
+            channel_scale = 2 ** i
+            outplanes = inplanes * channel_scale
+            stride = 1 if i == 0 else 2
+            if blocks == 0:
+                continue
+            strides = [stride] + [1]*(blocks-1)
+            i = i + 1
+            with g.name_scope('layer{}'.format(i)):
+                for j, stride in enumerate(strides):
+                    # BasicBlock on ##
+                    enable_skip = stride != 1 or inplanes != outplanes * expansion
+                    with g.name_scope('conv{}_{}a'.format(i, j)):
+                        output = conv(prev, filters=outplanes, kernel_size=3, pad='SAME', stride=(1,stride,stride,1), c_dtype=hl, w_dtype=hl)
+                    with g.name_scope('conv{}_{}b'.format(i, j)):
+                        output = conv(output, filters=outplanes, kernel_size=3, pad='SAME', stride=(1,1,1,1), c_dtype=hl, w_dtype=hl)
+                    if enable_skip:
+                        with g.name_scope('conv{}_{}d'.format(i, j)):
+                            residual = conv(prev, filters=outplanes*expansion, kernel_size=1, pad='SAME', stride=(1,stride,stride,1),
+                                    c_dtype=hl, w_dtype=hl)
+                    else:
+                        residual = prev
+
+                    with g.name_scope('add{}_{}'.format(i, j)):
+                        prev = add((residual, output))
+                    inplanes = outplanes * expansion
+                    # BasicBlock off ##
+
+        with g.name_scope('fc'):
+            prev = maxPool(prev, pooling_kernel=(1,7,7,1), stride=(1,7,7,1), pad='VALID') # TODO add average
+            prev = flatten(prev)
+            prev = fc(prev, output_channels=1000, w_dtype=vl, f_dtype=vl)
+
+        return g
+
+def get_resnet_50(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-50
+    '''
+    g = Graph('ResNet-50-8bit', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    config = [3, 4, 6, 3]
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('conv_stem'):
+            conv_stem = conv(i, filters=64, kernel_size=7, pad='SAME', stride=(1,2,2,1),
+                    c_dtype=vl, w_dtype=vl)
+        with g.name_scope('pool_stem'):
+            pool_stem = maxPool(conv_stem, pooling_kernel=(1,2,2,1), stride=(1,2,2,1), pad='VALID')
+            prev = pool_stem
+
+        expansion = 4
+        inplanes = 64
+        for i, blocks in enumerate(config):
+            channel_scale = 2 ** i
+            outplanes = inplanes * channel_scale
+            stride = 1 if i == 0 else 2
+            if blocks == 0:
+                continue
+            strides = [stride] + [1]*(blocks-1)
+            i = i + 1
+            with g.name_scope('layer{}'.format(i)):
+                for j, stride in enumerate(strides):
+                    # BottleNeck on ##
+                    enable_skip = stride != 1 or inplanes != outplanes * expansion
+                    with g.name_scope('conv{}_{}a'.format(i, j)):
+                        output = conv(prev, filters=outplanes, kernel_size=1, pad='SAME', c_dtype=hl, w_dtype=hl)
+                    with g.name_scope('conv{}_{}b'.format(i, j)):
+                        output = conv(output, filters=outplanes, kernel_size=3, pad='SAME', stride=(1,stride,stride,1), c_dtype=hl, w_dtype=hl)
+                    with g.name_scope('conv{}_{}c'.format(i, j)):
+                        output = conv(output, filters=outplanes*expansion, kernel_size=1, pad='SAME', c_dtype=hl, w_dtype=hl)
+                    if enable_skip:
+                        with g.name_scope('conv{}_{}d'.format(i, j)):
+                            residual = conv(prev, filters=outplanes*expansion, kernel_size=1, pad='SAME', stride=(1,stride,stride,1),
+                                    c_dtype=hl, w_dtype=hl)
+                    else:
+                        residual = prev
+
+                    with g.name_scope('add{}_{}'.format(i, j)):
+                        prev = add((residual, output))
+                    inplanes = outplanes * expansion
+                    # BottleNeck off ##
+
+        with g.name_scope('fc'):
+            prev = maxPool(prev, pooling_kernel=(1,7,7,1), stride=(1,7,7,1), pad='VALID') # TODO add average
+            prev = flatten(prev)
+            prev = fc(prev, output_channels=1000, w_dtype=vl, f_dtype=vl)
+
+        return g
+
+def get_mobilenet_v1_4bit():
+    '''
+    mobilenet v1 according to HAQ (4bit)
+    '''
+
+    g = Graph('MobilenetV1-HAQ-4bit', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    channel = 32
+    config = [(64, 1), (128, 2), (128, 1), (256, 2), (256, 1), (512, 2), (512, 1), (512, 1), (512, 1),
+            (512, 1), (512, 1), (1024, 2), (1024, 1)]
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('conv1'):
+            conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1),
+                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+
+        prev = conv1
+        with g.name_scope('feature'):
+            for i, (c, s) in enumerate(config):
+                with g.name_scope('bottle_{}_depth'.format(i)):
+                    prev = conv(prev, filters=channel, kernel_size=3, pad='SAME', group=channel, stride=(1,s,s,1),
+                            c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
+                with g.name_scope('bottle_{}_point'.format(i)):
+                    prev = conv(prev, filters=c, kernel_size=1, pad='SAME',
+                            c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
+                channel = c
+
+        with g.name_scope('avg_pool'):
+            prev = maxPool(prev, pooling_kernel=(1,7,7,1), stride=(1,7,7,1), pad='VALID') # TODO add average
+            #prev = globalAvgPool(prev, dtype=FQDtype.FXP16)
+
+        with g.name_scope('flatten'):
+            prev = flatten(prev)
+
+        with g.name_scope('fc1'):
+            fc1 = fc(prev, output_channels=1000, w_dtype=FQDtype.FXP8, f_dtype=FQDtype.FXP8)
+
+    return g
+
+def get_mobilenet_v1_8bit():
+    '''
+    mobilenet v1 according to HAQ (8bit)
+    '''
+
+    g = Graph('MobilenetV1-HAQ-8bit', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    channel = 32
+    config = [(64, 1), (128, 2), (128, 1), (256, 2), (256, 1), (512, 2), (512, 1), (512, 1), (512, 1),
+            (512, 1), (512, 1), (1024, 2), (1024, 1)]
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('conv1'):
+            conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1),
+                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+
+        prev = conv1
+        with g.name_scope('feature'):
+            for i, (c, s) in enumerate(config):
+                with g.name_scope('bottle_{}_depth'.format(i)):
+                    prev = conv(prev, filters=channel, kernel_size=3, pad='SAME', group=channel, stride=(1,s,s,1),
+                            c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                with g.name_scope('bottle_{}_point'.format(i)):
+                    prev = conv(prev, filters=c, kernel_size=1, pad='SAME',
+                            c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                channel = c
+
+        with g.name_scope('avg_pool'):
+            prev = maxPool(prev, pooling_kernel=(1,7,7,1), stride=(1,7,7,1), pad='VALID') # TODO add average
+            #prev = globalAvgPool(prev, dtype=FQDtype.FXP16)
+
+        with g.name_scope('flatten'):
+            prev = flatten(prev)
+
+        with g.name_scope('fc1'):
+            fc1 = fc(prev, output_channels=1000, w_dtype=FQDtype.FXP8, f_dtype=FQDtype.FXP8)
+
+    return g
+
+def get_mobilenet_v2_8bit():
+    '''
+    mobilenet v1 according to HAQ (8bit)
+    '''
+
+    g = Graph('MobilenetV2-HAQ-8bit', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    channel = 32
+    last_channel = 1280
+    config = [
+             # t, c, n, s
+             [1, 16, 1, 1],
+             [6, 24, 2, 2],
+             [6, 32, 3, 2],
+             [6, 64, 4, 2],
+             [6, 96, 3, 1],
+             [6, 160, 3, 2],
+             [6, 320, 1, 1],
+             ]
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('conv0'):
+            conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1),
+                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+
+        prev = conv1
+        with g.name_scope('feature'):
+            for i, item in enumerate(config):
+                i = i + 1
+                t = item[0]
+                c = item[1]
+                n = item[2]
+                s = item[3]
+                output_channel = c
+                expand_ratio = t
+                for j in range(n):
+                    if j == 0:
+                        stride=(1,s,s,1)
+                    else:
+                        stride=(1,1,1,1)
+                    #### InvertedResidual on
+                    hidden_dim = channel * expand_ratio 
+                    use_res_connect = s == 1 and channel == output_channel
+                    if expand_ratio == 1:
+                        with g.name_scope('conv{}_{}a'.format(i, j)):
+                            output = conv(prev, filters=hidden_dim, kernel_size=3, pad='SAME', group=hidden_dim, stride=stride,
+                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                        with g.name_scope('conv{}_{}b'.format(i, j)):
+                            output = conv(output, filters=output_channel, kernel_size=1, pad='SAME',
+                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                    else:
+                        with g.name_scope('conv{}_{}a'.format(i, j)):
+                            output = conv(prev, filters=hidden_dim, kernel_size=1, pad='SAME',
+                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                        with g.name_scope('conv{}_{}b'.format(i, j)):
+                            output = conv(output, filters=hidden_dim, kernel_size=3, pad='SAME', group=hidden_dim, stride=stride,
+                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                        with g.name_scope('conv{}_{}c'.format(i, j)):
+                            output = conv(output, filters=output_channel, kernel_size=1, pad='SAME',
+                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+
+                    if use_res_connect:
+                        with g.name_scope('add{}_{}'.format(i, j)):
+                            prev = add((prev, output))
+                    else:
+                        prev = output
+                    #### InvertedResidual off
+                    channel = output_channel
+
+            with g.name_scope('conv{}'.format(len(config) + 1)):
+                output = conv(prev, filters=last_channel, kernel_size=1, pad='SAME',
+                        c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                prev = output
+
+        with g.name_scope('flatten'):
+            prev = flatten(prev)
+
+        with g.name_scope('fc1'):
+            fc1 = fc(prev, output_channels=1000, w_dtype=FQDtype.FXP8, f_dtype=FQDtype.FXP8)
+
+    return g
+
 if __name__ == "__main__":
     # parser object
     argp = argparse.ArgumentParser()
 
     # parser arguments
-    argp.add_argument("-c", "--config_file", dest='config_file', default='conf.ini', type=str)
+    argp.add_argument("-c", "--config_file", dest='config_file', default='bf_e_conf.ini', type=str)
     argp.add_argument("-v", "--verbose", dest='verbose', default=False, action='store_true')
 
     # parse

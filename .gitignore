@@ -1,4 +1,9 @@
-./fig
+fig
+results
 bitfusion.egg-info
+.csv
 .ipynb_checkpoints
+.ipynb
 *.pyc
+*.swp
+.python-version
