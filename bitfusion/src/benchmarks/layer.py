@@ -196,7 +196,7 @@ def get_bench_nn(bench_name, WRPN=False):
 def save_list(lists=None, filename=None):
     assert len(lists) % 2 == 0, "list length should be even, but found %d" % len(lists)
 
-bucket = 5
+bucket = 10
 benchlist = []
 
 def load_config():
