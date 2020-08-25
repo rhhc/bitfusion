@@ -1,6 +1,7 @@
 
-# fix input channel
 # type width height cin cout kernel stride group
+
+# fix input channel, iteratve output channel
 0 56 56 64 64 3 1 1    # layer1 block1 conv1
 0 56 56 64 64 3 1 1    # layer1 block2 conv1
 0 56 56 64 128 3 2 1   # layer2 block1 conv1
@@ -10,8 +11,7 @@
 0 14 14 256 512 3 2 1  # layer4 block1 conv1
 0  7  7 512 512 3 1 1  # layer4 block2 conv1
 
-
-# fix output channel
+# iteratve input and fix output channel
 1 56 56 64 64 3 1 1    # layer1 block1 conv2
 1 56 56 64 64 3 1 1    # layer1 block2 conv2
 1 28 28 128 128 3 1 1  # layer2 block1 conv2

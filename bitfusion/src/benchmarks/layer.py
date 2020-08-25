@@ -98,7 +98,6 @@ def load_list(record="models/list.txt", result=set()):
                                     continue
                                 else:
                                     group = i
-
                             result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
                                 width, height, cin, i, kernel, stride, "SAME", group, fb, wb))
                             result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
@@ -113,19 +112,33 @@ def load_list(record="models/list.txt", result=set()):
                                     continue
                                 else:
                                     group = i
-
                             result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
                                 width, height, i, cout, kernel, stride, "SAME", group, fb, wb))
                             result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
                                 width, height, i, cout, kernel, stride, "SAME", group, fb, wb))
 
-            if iteration_type == 0: # iterate bit config only
+            if iteration_type == 2: # iterate bit config only
                 for fb in [8, 4, 2]:
                     for wb in [8, 4, 2]:
                         result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
                             width, height, cin, cout, kernel, stride, "SAME", group, fb, wb))
                         result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
                             width, height, cin, cout, kernel, stride, "SAME", group, fb, wb))
+
+            if iteration_type == 3: # iterate input/output channel
+                for i in range(4, cin + 3 , 4):
+                    for j in range(4, cout + 3, 4):
+                        for fb in [8, 4, 2]:
+                            for wb in [8, 4, 2]:
+                                if lists[7] != 1:
+                                    if i != j: # assume same input/output for depth-wise conv
+                                        continue
+                                    else:
+                                        group = i
+                                result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
+                                    width, height, i, j, kernel, stride, "SAME", group, fb, wb))
+                                result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
+                                    width, height, i, j, kernel, stride, "SAME", group, fb, wb))
     print("Configuration number: before {}, new added {}, current {}".format(count, len(result)-count, len(result)))
     return result
 
