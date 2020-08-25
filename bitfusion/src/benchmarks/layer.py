@@ -65,6 +65,68 @@ def load_record(record="models/pytorch-resnet18.txt", result=set()):
             print(line, count)
             total_count += count
         print("Total configuration number (contains redundant) %d" % total_count)
+
+def load_list(record="models/list.txt", result=set()):
+    count = len(result)
+    with open(record) as f:
+        lines = f.readlines()
+        f.close()
+        for line in lines:
+            #print(line)
+            if line[0] == "#":
+                continue
+            items = line.split('#')[0]
+            lists = obtainInt(items.split())
+            if len(lists) == 0:
+                continue
+            assert len(lists) == 8, 'unexpected length %s' % items
+            iteration_type = lists[0]
+            width = lists[1]
+            height = lists[2]
+            cin = lists[3]
+            cout = lists[4]
+            kernel = lists[5] 
+            stride = lists[6]
+            group = lists[7]
+
+            if iteration_type == 0: # iterate output channel
+                for i in range(4, cout + 3 , 4):
+                    for fb in [8, 4, 2]:
+                        for wb in [8, 4, 2]:
+                            if lists[7] != 1:
+                                if i != j: # assume same input/output for depth-wise conv
+                                    continue
+                                else:
+                                    group = i
+
+                            result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
+                                width, height, cin, i, kernel, stride, "SAME", group, fb, wb))
+                            result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
+                                width, height, cin, i, kernel, stride, "SAME", group, fb, wb))
+
+            if iteration_type == 1: # iterate input channel
+                for i in range(4, cin + 3 , 4):
+                    for fb in [8, 4, 2]:
+                        for wb in [8, 4, 2]:
+                            if lists[7] != 1:
+                                if i != j: # assume same input/output for depth-wise conv
+                                    continue
+                                else:
+                                    group = i
+
+                            result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
+                                width, height, i, cout, kernel, stride, "SAME", group, fb, wb))
+                            result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
+                                width, height, i, cout, kernel, stride, "SAME", group, fb, wb))
+
+            if iteration_type == 0: # iterate bit config only
+                for fb in [8, 4, 2]:
+                    for wb in [8, 4, 2]:
+                        result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
+                            width, height, cin, cout, kernel, stride, "SAME", group, fb, wb))
+                        result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
+                            width, height, cin, cout, kernel, stride, "SAME", group, fb, wb))
+    print("Configuration number: before {}, new added {}, current {}".format(count, len(result)-count, len(result)))
     return result
 
 
@@ -121,6 +183,9 @@ def get_bench_nn(bench_name, WRPN=False):
 def save_list(lists=None, filename=None):
     assert len(lists) % 2 == 0, "list length should be even, but found %d" % len(lists)
 
+bucket = 5
+benchlist = []
+
 def load_config():
     index = os.getenv('bitfusion_index')
     try:
@@ -131,34 +196,30 @@ def load_config():
 
     result = set()
     for root, dirnames, filenames in os.walk('models'):
-        if dirnames != []:
+        #print(root, dirnames, filenames)
+        if root != 'models':
             continue
         for files in filenames:
             if '.txt' not in files:
                 continue
             record = os.path.join(root, files)
-            print("Item count in configuration set: %d" % len(result))
-            result = load_record(record=record, result=result)
+            print("Processing file %s" % record)
+            result = load_list(record=record, result=result)
             #break
     # reduce already profile one
     # convert to list and partition
     benchlist = list(result)
     benchlist.sort()
-    length = len(benchlist) // 2
-    print("Layer configuration number (reduce redundant): %d" % length) # 5626944 * 2
 
-    bucket = 100
     interval = len(benchlist) // bucket
     if interval % 2 != 0:
         interval = interval - 1
     print('interval is being set to %d' % interval)
     return benchlist, index, interval
 
-benchlist = []
-
 if __name__ == "__main__":
     bench, index, interval = load_config()
-    for i in range(102):
+    for i in range(bucket + 1):
         if i*interval < len(bench):
             if (i+1)*interval <= len(bench):
                 benchlist = bench[i*interval: i*interval + interval]
