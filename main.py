@@ -3,7 +3,7 @@ import os
 import numpy as np
 import sys
 import csv
-sys.path.insert(0, '/workspace/git/dnnweaver2')
+sys.path.insert(0, '../dnnweaver2')
 print(sys.version_info)
 import dnnweaver2
 
