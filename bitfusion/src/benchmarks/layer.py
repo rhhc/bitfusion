@@ -72,14 +72,14 @@ def load_list(record="models/list.txt", result=set()):
         lines = f.readlines()
         f.close()
         for line in lines:
-            #print(line)
             if line[0] == "#":
                 continue
-            items = line.split('#')[0]
-            lists = obtainInt(items.split())
+            if '#' in line:
+                line = line.split('#')[0]
+            lists = obtainInt(line.split())
             if len(lists) == 0:
                 continue
-            assert len(lists) == 8, 'unexpected length %s' % items
+            assert len(lists) == 8, 'unexpected length %s' % line
             iteration_type = lists[0]
             width = lists[1]
             height = lists[2]
@@ -89,33 +89,28 @@ def load_list(record="models/list.txt", result=set()):
             stride = lists[6]
             group = lists[7]
 
+            layer_count = 0
             if iteration_type == 0: # iterate output channel
                 for i in range(4, cout + 3 , 4):
                     for fb in [8, 4, 2]:
                         for wb in [8, 4, 2]:
-                            if lists[7] != 1:
-                                if i != j: # assume same input/output for depth-wise conv
-                                    continue
-                                else:
-                                    group = i
+                            assert group == 1, "Unexpect"
                             result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
                                 width, height, cin, i, kernel, stride, "SAME", group, fb, wb))
                             result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
                                 width, height, cin, i, kernel, stride, "SAME", group, fb, wb))
+                            layer_count += 2
 
             if iteration_type == 1: # iterate input channel
                 for i in range(4, cin + 3 , 4):
                     for fb in [8, 4, 2]:
                         for wb in [8, 4, 2]:
-                            if lists[7] != 1:
-                                if i != j: # assume same input/output for depth-wise conv
-                                    continue
-                                else:
-                                    group = i
+                            assert group == 1, "Unexpect"
                             result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
                                 width, height, i, cout, kernel, stride, "SAME", group, fb, wb))
                             result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
                                 width, height, i, cout, kernel, stride, "SAME", group, fb, wb))
+                            layer_count += 2
 
             if iteration_type == 2: # iterate bit config only
                 for fb in [8, 4, 2]:
@@ -124,14 +119,29 @@ def load_list(record="models/list.txt", result=set()):
                             width, height, cin, cout, kernel, stride, "SAME", group, fb, wb))
                         result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
                             width, height, cin, cout, kernel, stride, "SAME", group, fb, wb))
+                        layer_count += 2
 
             if iteration_type == 3: # iterate input/output channel
                 for i in range(4, cin + 3 , 4):
                     for j in range(4, cout + 3, 4):
                         for fb in [8, 4, 2]:
                             for wb in [8, 4, 2]:
+                                assert group == 1, "Unexpect"
+                                result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-base".format(
+                                    width, height, i, j, kernel, stride, "SAME", group, fb, wb))
+                                result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
+                                    width, height, i, j, kernel, stride, "SAME", group, fb, wb))
+                                layer_count += 2
+
+            if iteration_type == 4: # iterate input/output channel
+                cin_step = max(cin // 64, 4)
+                for i in range(cin_step, cin + cin_step - 1, cin_step):
+                    cout_step = max(cout // 64, 4)
+                    for j in range(cout_step, cout + cout_step - 1, cout_step):
+                        for fb in [8, 4, 2]:
+                            for wb in [8, 4, 2]:
                                 if lists[7] != 1:
-                                    if i != j: # assume same input/output for depth-wise conv
+                                    if i != j:
                                         continue
                                     else:
                                         group = i
@@ -139,6 +149,8 @@ def load_list(record="models/list.txt", result=set()):
                                     width, height, i, j, kernel, stride, "SAME", group, fb, wb))
                                 result.add("width_{}-height_{}-cin_{}-cout_{}-kernel_{}-stride_{}-pad_{}-group_{}-fb_{}-wb_{}-layer".format(
                                     width, height, i, j, kernel, stride, "SAME", group, fb, wb))
+                                layer_count += 2
+            print("Layer variant count %d" % layer_count)
     print("Configuration number: before {}, new added {}, current {}".format(count, len(result)-count, len(result)))
     return result
 
