@@ -17,7 +17,7 @@ from bitfusion.src.optimizer.optimizer import optimize_for_order, get_stats_fast
 def main(index=0):
     batch_size = 16
     
-    results_dir = './results'
+    results_dir = './results-mobilenet'
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
     
@@ -77,7 +77,7 @@ def main(index=0):
         return stats
     
     header = ["config", "latency(ms)", "power(mWatt)"]
-    profile_result = "results/layer-wise-%d.csv" % index
+    profile_result = os.path.join(results_dir, "layer-wise-%d.csv" % index)
     with open(profile_result, 'wb') as f:
         w = csv.writer(f)
         w.writerows([header])
