@@ -66,13 +66,15 @@ benchlist = [\
              #'LeNet-5', \
              #'VGG-7', \
              #'RESNET-18-twn', \
-             #'RESNET-18', \
-             #'RESNET-50', \
+             'RESNET-18-first', \
+             'RESNET-50-first', \
+             'RESNET-18', \
+             'RESNET-50', \
              #'RNN', \
              #'LSTM', \
              #'Mobilenet-V1-4bit', \
-             #'Mobilenet-V1-8bit', \
-             #'Mobilenet-V2-8bit', \
+             'Mobilenet-V1-8bit', \
+             'Mobilenet-V2-8bit', \
             ]
 
 try:

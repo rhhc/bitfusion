@@ -22,7 +22,9 @@ def main(index=0):
         os.makedirs(results_dir)
     
     #  if last result exists, the simulator would no generate new results
-    result_file = "bitfusion-abs-sim-sweep-%d.csv" % index
+    if index is None:
+        index = 'whole'
+    result_file = "bitfusion-abs-sim-sweep-%s.csv" % str(index)
     if os.path.exists(os.path.join(results_dir, result_file)):
         os.remove(os.path.join(results_dir, result_file))
     
@@ -59,7 +61,7 @@ def main(index=0):
     print('Got BitFusion Eyeriss, Numbers')
     
     bf_e_results = check_pandas_or_run(bf_e_sim, bf_e_sim_sweep_df, bf_e_sim_sweep_csv, batch_size=batch_size)
-    bf_e_results = bf_e_results.groupby('Network',as_index=False).agg(np.sum)
+    bf_e_results = bf_e_results.groupby('Network', as_index=False).agg(np.sum)
     area_stats = bf_e_sim.get_area()
     
     def df_to_stats(df):
@@ -77,7 +79,7 @@ def main(index=0):
         return stats
     
     header = ["config", "latency(ms)", "power(mWatt)"]
-    profile_result = "results/layer-wise-%d.csv" % index
+    profile_result = "%s/layer-wise-%s.csv" % (results_dir, str(index))
     with open(profile_result, 'wb') as f:
         w = csv.writer(f)
         w.writerows([header])
@@ -93,11 +95,15 @@ def main(index=0):
             bf_e_energy = bf_e_stats.get_energy(bf_e_sim.get_energy_cost()) * (batch_size / 16.)
             #bf_e_power = bf_e_energy / bf_e_time * 1.e-9
     
-            base_bf_e_stats = df_to_stats(bf_e_results.loc[bf_e_results['Network'] == bench.replace('layer', 'base')])
-            base_bf_e_cycles = base_bf_e_stats.total_cycles * (batch_size / 16.)
-            base_bf_e_time = base_bf_e_cycles / 500.e3 / 16
-            base_bf_e_energy = base_bf_e_stats.get_energy(bf_e_sim.get_energy_cost()) * (batch_size / 16.)
-            #base_bf_e_power = base_bf_e_energy / bf_e_time * 1.e-9
+            if 'layer' in bench:
+                base_bf_e_stats = df_to_stats(bf_e_results.loc[bf_e_results['Network'] == bench.replace('layer', 'base')])
+                base_bf_e_cycles = base_bf_e_stats.total_cycles * (batch_size / 16.)
+                base_bf_e_time = base_bf_e_cycles / 500.e3 / 16
+                base_bf_e_energy = base_bf_e_stats.get_energy(bf_e_sim.get_energy_cost()) * (batch_size / 16.)
+                #base_bf_e_power = base_bf_e_energy / bf_e_time * 1.e-9
+            else:
+                base_bf_e_time = 0
+                base_bf_e_energy = 0
     
             latency = bf_e_time - base_bf_e_time
             energy = bf_e_energy - base_bf_e_energy
