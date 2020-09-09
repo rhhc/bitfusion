@@ -239,6 +239,8 @@ def load_config():
     interval = len(benchlist) // bucket
     if interval % 2 != 0:
         interval = interval - 1
+    if interval == 0:
+        interval = len(benchlist)
     print('interval is being set to %d' % interval)
     return benchlist, index, interval
 

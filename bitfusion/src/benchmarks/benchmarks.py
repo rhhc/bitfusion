@@ -66,15 +66,17 @@ benchlist = [\
              #'LeNet-5', \
              #'VGG-7', \
              #'RESNET-18-twn', \
-             'RESNET-18-first', \
-             'RESNET-50-first', \
-             'RESNET-18', \
-             'RESNET-50', \
+             #'RESNET-18-8bit', \
+             #'RESNET-50-8bit', \
+             #'RESNET-18-16bit', \
+             #'RESNET-50-32bit', \
              #'RNN', \
              #'LSTM', \
              #'Mobilenet-V1-4bit', \
-             'Mobilenet-V1-8bit', \
-             'Mobilenet-V2-8bit', \
+             #'Mobilenet-V1-8bit', \
+             #'Mobilenet-V2-8bit', \
+             #'Mobilenet-V1-32bit', \
+             #'Mobilenet-V2-32bit', \
             ]
 
 try:
@@ -98,27 +100,33 @@ def get_bench_nn(bench_name, WRPN=False):
         return get_lenet_5_twn()
     elif bench_name == 'VGG-7':
         return get_vgg_7_twn()
-    elif bench_name == 'RESNET-18':
-        return get_resnet_18()
     elif bench_name == 'RESNET-18-twn':
         if WRPN:
             return get_resnet_18_wrpn()
         else:
             return get_resnet_18_twn()
-    elif bench_name == 'RESNET-50':
+    elif bench_name == 'RESNET-18-8bit':
+        return get_resnet_18()
+    elif bench_name == 'RESNET-50-8bit':
         return get_resnet_50()
+    elif bench_name == 'RESNET-18-16bit':
+        return get_resnet_18(vl=FQDtype.FXP16, hl=FQDtype.FXP16)
+    elif bench_name == 'RESNET-50-32bit':
+        return get_resnet_50(vl=FQDtype.FXP32, hl=FQDtype.FXP32)
     elif bench_name == 'RESNET-20':
         return get_resnet_20_twn()
     elif bench_name == 'RNN':
         return get_RNN('RNN', 2048)
     elif bench_name == 'LSTM':
         return get_LSTM('LSTM', 900)
-    elif bench_name == 'Mobilenet-V1-4bit':
-        return get_mobilenet_v1_4bit()
     elif bench_name == 'Mobilenet-V1-8bit':
-        return get_mobilenet_v1_8bit()
+        return get_mobilenet_v1()
     elif bench_name == 'Mobilenet-V2-8bit':
-        return get_mobilenet_v2_8bit()
+        return get_mobilenet_v2()
+    elif bench_name == 'Mobilenet-V1-32bit':
+        return get_mobilenet_v1(vl=FQDtype.FXP32, hl=FQDtype.FXP32)
+    elif bench_name == 'Mobilenet-V2-32bit':
+        return get_mobilenet_v2(vl=FQDtype.FXP32, hl=FQDtype.FXP32)
     elif 'base' in bench_name or 'layer' in bench_name:
         return layer.get_bench_nn(bench_name)
 
@@ -799,7 +807,7 @@ def get_resnet_50(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
     '''
     ResNet-50
     '''
-    g = Graph('ResNet-50-8bit', dataset='ImageNet', log_level=logging.INFO)
+    g = Graph('ResNet-50', dataset='ImageNet', log_level=logging.INFO)
     batch_size = 16
 
     config = [3, 4, 6, 3]
@@ -854,12 +862,12 @@ def get_resnet_50(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
 
         return g
 
-def get_mobilenet_v1_4bit():
+def get_mobilenet_v1(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
     '''
-    mobilenet v1 according to HAQ (4bit)
+    mobilenet v1 according to HAQ
     '''
 
-    g = Graph('MobilenetV1-HAQ-4bit', dataset='ImageNet', log_level=logging.INFO)
+    g = Graph('MobilenetV1-HAQ', dataset='ImageNet', log_level=logging.INFO)
     batch_size = 16
 
     channel = 32
@@ -872,17 +880,17 @@ def get_mobilenet_v1_4bit():
 
         with g.name_scope('conv1'):
             conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1),
-                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                    c_dtype=vl, w_dtype=vl)
 
         prev = conv1
         with g.name_scope('feature'):
             for i, (c, s) in enumerate(config):
                 with g.name_scope('bottle_{}_depth'.format(i)):
                     prev = conv(prev, filters=channel, kernel_size=3, pad='SAME', group=channel, stride=(1,s,s,1),
-                            c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
+                            c_dtype=hl, w_dtype=hl)
                 with g.name_scope('bottle_{}_point'.format(i)):
                     prev = conv(prev, filters=c, kernel_size=1, pad='SAME',
-                            c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
+                            c_dtype=hl, w_dtype=hl)
                 channel = c
 
         with g.name_scope('avg_pool'):
@@ -893,59 +901,16 @@ def get_mobilenet_v1_4bit():
             prev = flatten(prev)
 
         with g.name_scope('fc1'):
-            fc1 = fc(prev, output_channels=1000, w_dtype=FQDtype.FXP8, f_dtype=FQDtype.FXP8)
+            fc1 = fc(prev, output_channels=1000, w_dtype=vl, f_dtype=vl)
 
     return g
 
-def get_mobilenet_v1_8bit():
+def get_mobilenet_v2(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
     '''
-    mobilenet v1 according to HAQ (8bit)
-    '''
-
-    g = Graph('MobilenetV1-HAQ-8bit', dataset='ImageNet', log_level=logging.INFO)
-    batch_size = 16
-
-    channel = 32
-    config = [(64, 1), (128, 2), (128, 1), (256, 2), (256, 1), (512, 2), (512, 1), (512, 1), (512, 1),
-            (512, 1), (512, 1), (1024, 2), (1024, 1)]
-
-    with g.as_default():
-        with g.name_scope('inputs'):
-            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
-
-        with g.name_scope('conv1'):
-            conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1),
-                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
-
-        prev = conv1
-        with g.name_scope('feature'):
-            for i, (c, s) in enumerate(config):
-                with g.name_scope('bottle_{}_depth'.format(i)):
-                    prev = conv(prev, filters=channel, kernel_size=3, pad='SAME', group=channel, stride=(1,s,s,1),
-                            c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
-                with g.name_scope('bottle_{}_point'.format(i)):
-                    prev = conv(prev, filters=c, kernel_size=1, pad='SAME',
-                            c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
-                channel = c
-
-        with g.name_scope('avg_pool'):
-            prev = maxPool(prev, pooling_kernel=(1,7,7,1), stride=(1,7,7,1), pad='VALID') # TODO add average
-            #prev = globalAvgPool(prev, dtype=FQDtype.FXP16)
-
-        with g.name_scope('flatten'):
-            prev = flatten(prev)
-
-        with g.name_scope('fc1'):
-            fc1 = fc(prev, output_channels=1000, w_dtype=FQDtype.FXP8, f_dtype=FQDtype.FXP8)
-
-    return g
-
-def get_mobilenet_v2_8bit():
-    '''
-    mobilenet v1 according to HAQ (8bit)
+    mobilenet v2 according to HAQ
     '''
 
-    g = Graph('MobilenetV2-HAQ-8bit', dataset='ImageNet', log_level=logging.INFO)
+    g = Graph('MobilenetV2-HAQ', dataset='ImageNet', log_level=logging.INFO)
     batch_size = 16
 
     channel = 32
@@ -967,7 +932,7 @@ def get_mobilenet_v2_8bit():
 
         with g.name_scope('conv0'):
             conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1),
-                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                    c_dtype=vl, w_dtype=vl)
 
         prev = conv1
         with g.name_scope('feature'):
@@ -990,20 +955,20 @@ def get_mobilenet_v2_8bit():
                     if expand_ratio == 1:
                         with g.name_scope('conv{}_{}a'.format(i, j)):
                             output = conv(prev, filters=hidden_dim, kernel_size=3, pad='SAME', group=hidden_dim, stride=stride,
-                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                                    c_dtype=hl, w_dtype=hl)
                         with g.name_scope('conv{}_{}b'.format(i, j)):
                             output = conv(output, filters=output_channel, kernel_size=1, pad='SAME',
-                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                                    c_dtype=hl, w_dtype=hl)
                     else:
                         with g.name_scope('conv{}_{}a'.format(i, j)):
                             output = conv(prev, filters=hidden_dim, kernel_size=1, pad='SAME',
-                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                                    c_dtype=hl, w_dtype=hl)
                         with g.name_scope('conv{}_{}b'.format(i, j)):
                             output = conv(output, filters=hidden_dim, kernel_size=3, pad='SAME', group=hidden_dim, stride=stride,
-                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                                    c_dtype=hl, w_dtype=hl)
                         with g.name_scope('conv{}_{}c'.format(i, j)):
                             output = conv(output, filters=output_channel, kernel_size=1, pad='SAME',
-                                    c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                                    c_dtype=hl, w_dtype=hl)
 
                     if use_res_connect:
                         with g.name_scope('add{}_{}'.format(i, j)):
@@ -1015,14 +980,14 @@ def get_mobilenet_v2_8bit():
 
             with g.name_scope('conv{}'.format(len(config) + 1)):
                 output = conv(prev, filters=last_channel, kernel_size=1, pad='SAME',
-                        c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+                        c_dtype=hl, w_dtype=hl)
                 prev = output
 
         with g.name_scope('flatten'):
             prev = flatten(prev)
 
         with g.name_scope('fc1'):
-            fc1 = fc(prev, output_channels=1000, w_dtype=FQDtype.FXP8, f_dtype=FQDtype.FXP8)
+            fc1 = fc(prev, output_channels=1000, w_dtype=vl, f_dtype=vl)
 
     return g
 

@@ -25,5 +25,5 @@
 # fix both input and output channel
 2 56 56 64 128 1 2 1   # layer2 block1 skip-connect
 2 28 28 128 256 1 2 1  # layer3 block1 skip-connect
-2 14 14 128 256 1 2 1  # layer4 block1 skip-connect
+2 14 14 256 512 1 2 1  # layer4 block1 skip-connect
 
