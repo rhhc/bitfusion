@@ -217,6 +217,7 @@ def load_missing():
         index = int(index)
     except:
         index = None
+    index = -1
     print("Index", index)
 
     result = set()

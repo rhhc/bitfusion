@@ -124,6 +124,7 @@ if __name__ == '__main__':
         index = int(index)
     except:
         index = None
+    index = -1
     print("Index", index)
     main(index)
 
