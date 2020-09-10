@@ -211,6 +211,43 @@ def save_list(lists=None, filename=None):
 bucket = 50
 benchlist = []
 
+def load_missing():
+    index = os.getenv('bitfusion_index')
+    try:
+        index = int(index)
+    except:
+        index = None
+    print("Index", index)
+
+    result = set()
+    for root, dirnames, filenames in os.walk('missing'):
+        #print(root, dirnames, filenames)
+        if root != 'missing':
+            continue
+        for files in filenames:
+            if '.txt' not in files:
+                continue
+            record = os.path.join(root, files)
+            print("Processing file %s" % record)
+            with open(record) as f:
+                lines = f.readlines()
+                f.close()
+                for line in lines:
+                    if 'not in dict' in line:
+                        item = line.split()[2]
+                        result.add(item)
+                        result.add(item.replace('layer', 'base'))
+    benchlist = list(result)
+    benchlist.sort()
+
+    interval = len(benchlist) // bucket
+    if interval % 2 != 0:
+        interval = interval - 1
+    if interval == 0:
+        interval = len(benchlist)
+    print('interval is being set to %d' % interval)
+    return benchlist, index, interval
+
 def load_config():
     index = os.getenv('bitfusion_index')
     try:
@@ -246,6 +283,8 @@ def load_config():
 
 if __name__ == "__main__":
     bench, index, interval = load_config()
+    if len(bench) == 0:
+        bench, index, interval = load_missing()
     for i in range(bucket + 1):
         if i*interval < len(bench):
             if (i+1)*interval <= len(bench):
@@ -257,6 +296,8 @@ if __name__ == "__main__":
         print("benchlist with index %d length: %d" % (i, len(benchlist)))
 else:
     bench, index, interval = load_config()
+    if len(bench) == 0:
+        bench, index, interval = load_missing()
     if index is not None:
         i = index
         if i*interval < len(bench):
