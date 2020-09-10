@@ -285,14 +285,18 @@ if __name__ == "__main__":
     bench, index, interval = load_config()
     if len(bench) == 0:
         bench, index, interval = load_missing()
-    for i in range(bucket + 1):
-        if i*interval < len(bench):
-            if (i+1)*interval <= len(bench):
-                benchlist = bench[i*interval: i*interval + interval]
+    if index < 0:
+        benchlist = bench
+        print("benchlist with index %d length: %d" % (index, len(benchlist)))
+    else:
+        for i in range(bucket + 1):
+            if i*interval < len(bench):
+                if (i+1)*interval <= len(bench):
+                    benchlist = bench[i*interval: i*interval + interval]
+                else:
+                    benchlist = bench[i*interval:]
             else:
-                benchlist = bench[i*interval:]
-        else:
-            benchlist = []
+                benchlist = []
         print("benchlist with index %d length: %d" % (i, len(benchlist)))
 else:
     bench, index, interval = load_config()
@@ -300,7 +304,9 @@ else:
         bench, index, interval = load_missing()
     if index is not None:
         i = index
-        if i*interval < len(bench):
+        if i < 0:
+            benchlist = bench
+        elif i*interval < len(bench):
             if (i+1)*interval <= len(bench):
                 benchlist = bench[i*interval: i*interval + interval]
             else:
