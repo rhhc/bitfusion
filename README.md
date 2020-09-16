@@ -21,9 +21,10 @@ See bitfusion-generate-graphs.ipynb for details on how to use the simulator.
       ```
   2. profiling
      ```
-     #index in range(101)
+     #index in range(51)
      screen -S bitfusion_$index
-     export bitfusion_index=index
+     export bitfusion_index=resnet-index
+     export bitfusion_thread=50
      python main.py
      # result save in result/layer-wise-$index.csv
      ```
