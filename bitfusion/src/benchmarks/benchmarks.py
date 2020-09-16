@@ -96,10 +96,10 @@ benchlist = [\
              #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_2-wb_4-base',  \
              #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_2-layer', \
              #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_2-base',  \
-             'width_14-height_14-cin_180-cout_12-kernel_3-stride_2-pad_SAME-group_1-fb_4-wb_8-layer', \
-             'width_14-height_14-cin_180-cout_12-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_8-layer', \
-             'width_14-height_14-cin_180-cout_12-kernel_3-stride_2-pad_SAME-group_1-fb_4-wb_8-base', \
-             'width_14-height_14-cin_180-cout_12-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_8-base', \
+             #'width_14-height_14-cin_180-cout_12-kernel_3-stride_2-pad_SAME-group_1-fb_4-wb_8-layer', \
+             #'width_14-height_14-cin_180-cout_12-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_8-layer', \
+             #'width_14-height_14-cin_180-cout_12-kernel_3-stride_2-pad_SAME-group_1-fb_4-wb_8-base', \
+             #'width_14-height_14-cin_180-cout_12-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_8-base', \
             ]
 
 try:
