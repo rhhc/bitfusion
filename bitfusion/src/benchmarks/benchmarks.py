@@ -67,16 +67,35 @@ benchlist = [\
              #'VGG-7', \
              #'RESNET-18-twn', \
              #'RESNET-18-8bit', \
+             #'RESNET-18-a8w8', \
+             #'RESNET-18-a4w8', \
+             #'RESNET-18-a2w8', \
              #'RESNET-50-8bit', \
-             #'RESNET-18-16bit', \
-             #'RESNET-50-32bit', \
+             #'RESNET-18-first-layer', \
+             #'RESNET-18-first-base', \
+             #'RESNET-18-last-layer', \
+             #'RESNET-18-last-base', \
+             #'RESNET-50-last-layer', \
+             #'RESNET-50-last-base', \
              #'RNN', \
              #'LSTM', \
+             #'Mobilenet-V1-first-layer', \
+             #'Mobilenet-V1-last-layer', \
+             #'Mobilenet-V2-last-layer', \
+             #'Mobilenet-V1-first-base', \
+             #'Mobilenet-V1-last-base', \
+             #'Mobilenet-V2-last-base', \
              #'Mobilenet-V1-4bit', \
              #'Mobilenet-V1-8bit', \
              #'Mobilenet-V2-8bit', \
-             #'Mobilenet-V1-32bit', \
-             #'Mobilenet-V2-32bit', \
+             #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_2-wb_2-layer', \
+             #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_2-wb_2-base',  \
+             #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_4-wb_2-layer', \
+             #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_4-wb_2-base',  \
+             #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_2-wb_4-layer', \
+             #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_2-wb_4-base',  \
+             #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_2-layer', \
+             #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_2-base',  \
             ]
 
 try:
@@ -107,26 +126,48 @@ def get_bench_nn(bench_name, WRPN=False):
             return get_resnet_18_twn()
     elif bench_name == 'RESNET-18-8bit':
         return get_resnet_18()
+    elif bench_name == 'RESNET-18-a8w8':
+        return get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP8, wb=FQDtype.FXP8)
+    elif bench_name == 'RESNET-18-a4w8':
+        return get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP4, wb=FQDtype.FXP8)
+    elif bench_name == 'RESNET-18-a2w8':
+        return get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP2, wb=FQDtype.FXP8)
     elif bench_name == 'RESNET-50-8bit':
         return get_resnet_50()
-    elif bench_name == 'RESNET-18-16bit':
-        return get_resnet_18(vl=FQDtype.FXP16, hl=FQDtype.FXP16)
-    elif bench_name == 'RESNET-50-32bit':
-        return get_resnet_50(vl=FQDtype.FXP32, hl=FQDtype.FXP32)
+    elif bench_name == 'RESNET-18-first-layer':
+        return get_resnet_18_first_layer()
+    elif bench_name == 'RESNET-18-first-base':
+        return get_resnet_18_first_base()
+    elif bench_name == 'RESNET-18-last-layer':
+        return get_resnet_18_last_layer()
+    elif bench_name == 'RESNET-18-last-base':
+        return get_resnet_18_last_base()
+    elif bench_name == 'RESNET-50-last-base':
+        return get_resnet_50_last_base()
+    elif bench_name == 'RESNET-50-last-layer':
+        return get_resnet_50_last_layer()
     elif bench_name == 'RESNET-20':
         return get_resnet_20_twn()
     elif bench_name == 'RNN':
         return get_RNN('RNN', 2048)
     elif bench_name == 'LSTM':
         return get_LSTM('LSTM', 900)
+    elif bench_name == 'Mobilenet-V1-first-base':
+        return get_mobilenet_v1_first_base()
+    elif bench_name == 'Mobilenet-V1-last-base':
+        return get_mobilenet_v1_last_base()
+    elif bench_name == 'Mobilenet-V2-last-base':
+        return get_mobilenet_v2_last_base()
+    elif bench_name == 'Mobilenet-V1-first-layer':
+        return get_mobilenet_v1_first_layer()
+    elif bench_name == 'Mobilenet-V1-last-layer':
+        return get_mobilenet_v1_last_layer()
+    elif bench_name == 'Mobilenet-V2-last-layer':
+        return get_mobilenet_v2_last_layer()
     elif bench_name == 'Mobilenet-V1-8bit':
         return get_mobilenet_v1()
     elif bench_name == 'Mobilenet-V2-8bit':
         return get_mobilenet_v2()
-    elif bench_name == 'Mobilenet-V1-32bit':
-        return get_mobilenet_v1(vl=FQDtype.FXP32, hl=FQDtype.FXP32)
-    elif bench_name == 'Mobilenet-V2-32bit':
-        return get_mobilenet_v2(vl=FQDtype.FXP32, hl=FQDtype.FXP32)
     elif 'base' in bench_name or 'layer' in bench_name:
         return layer.get_bench_nn(bench_name)
 
@@ -746,7 +787,106 @@ def get_resnet_18_wrpn():
                             c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
     return g
 
-def get_resnet_18(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+def get_resnet_18_first_layer(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('ResNet-18-first', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('conv_base'):
+            i = conv(i, filters=3, kernel_size=1, pad='SAME', stride=(1,1,1,1),  c_dtype=vl, w_dtype=vl)
+
+        with g.name_scope('conv_stem'):
+            conv_stem = conv(i, filters=64, kernel_size=7, pad='SAME', stride=(1,2,2,1), c_dtype=vl, w_dtype=vl)
+        return g
+
+def get_resnet_18_first_base(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('ResNet-18-first', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('conv_base'):
+            i = conv(i, filters=3, kernel_size=1, pad='SAME', stride=(1,1,1,1),  c_dtype=vl, w_dtype=vl)
+        return g
+
+def get_resnet_18_last_layer(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('ResNet-18-last', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,512,1,1), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('fc_base'):
+            i = fc(i, output_channels=512, w_dtype=vl, f_dtype=vl)
+
+        with g.name_scope('fc'):
+            prev = fc(i, output_channels=1000, w_dtype=vl, f_dtype=vl)
+        return g
+
+def get_resnet_18_last_base(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('ResNet-18-last', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,512,1,1), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('fc_base'):
+            i = fc(i, output_channels=512, w_dtype=vl, f_dtype=vl)
+        return g
+
+def get_resnet_50_last_layer(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('ResNet-50-last', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,2048,1,1), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('fc_base'):
+            i = fc(i, output_channels=2048, w_dtype=vl, f_dtype=vl)
+
+        with g.name_scope('fc'):
+            prev = fc(i, output_channels=1000, w_dtype=vl, f_dtype=vl)
+        return g
+
+def get_resnet_50_last_base(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('ResNet-50-last', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,2048,1,1), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('fc_base'):
+            i = fc(i, output_channels=2048, w_dtype=vl, f_dtype=vl)
+        return g
+
+def get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP8, wb=FQDtype.FXP8):
     '''
     ResNet-18
     '''
@@ -781,13 +921,13 @@ def get_resnet_18(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
                     # BasicBlock on ##
                     enable_skip = stride != 1 or inplanes != outplanes * expansion
                     with g.name_scope('conv{}_{}a'.format(i, j)):
-                        output = conv(prev, filters=outplanes, kernel_size=3, pad='SAME', stride=(1,stride,stride,1), c_dtype=hl, w_dtype=hl)
+                        output = conv(prev, filters=outplanes, kernel_size=3, pad='SAME', stride=(1,stride,stride,1), c_dtype=fb, w_dtype=wb)
                     with g.name_scope('conv{}_{}b'.format(i, j)):
-                        output = conv(output, filters=outplanes, kernel_size=3, pad='SAME', stride=(1,1,1,1), c_dtype=hl, w_dtype=hl)
+                        output = conv(output, filters=outplanes, kernel_size=3, pad='SAME', stride=(1,1,1,1), c_dtype=fb, w_dtype=wb)
                     if enable_skip:
                         with g.name_scope('conv{}_{}d'.format(i, j)):
                             residual = conv(prev, filters=outplanes*expansion, kernel_size=1, pad='SAME', stride=(1,stride,stride,1),
-                                    c_dtype=hl, w_dtype=hl)
+                                    c_dtype=fb, w_dtype=wb)
                     else:
                         residual = prev
 
@@ -861,6 +1001,102 @@ def get_resnet_50(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
             prev = fc(prev, output_channels=1000, w_dtype=vl, f_dtype=vl)
 
         return g
+
+def get_mobilenet_v1_first_base():
+    g = Graph('MobilenetV1-HAQ-first', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+    channel = 32
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('conv1_base'):
+            i = conv(i, filters=3, kernel_size=1, pad='SAME', stride=(1,1,1,1), c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+        return g
+
+def get_mobilenet_v1_first_layer():
+    g = Graph('MobilenetV1-HAQ-first', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+    channel = 32
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('conv1_base'):
+            i = conv(i, filters=3, kernel_size=1, pad='SAME', stride=(1,1,1,1), c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+
+        with g.name_scope('conv1'):
+            conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1), c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+        return g
+
+def get_mobilenet_v1_last_layer(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('MobilenetV1-last', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+    channel=1024
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,channel,1,1), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('fc_base'):
+            i = fc(i, output_channels=channel, w_dtype=vl, f_dtype=vl)
+
+        with g.name_scope('fc'):
+            prev = fc(i, output_channels=1000, w_dtype=vl, f_dtype=vl)
+        return g
+
+def get_mobilenet_v1_last_base(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('MobilenetV1-last', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+    channel=1024
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,channel,1,1), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('fc_base'):
+            i = fc(i, output_channels=channel, w_dtype=vl, f_dtype=vl)
+        return g
+
+def get_mobilenet_v2_last_layer(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('MobilenetV2-last', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+    channel=1280
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,channel,1,1), name='data', dtype=FQDtype.FXP8, trainable=False)
+
+        with g.name_scope('fc_base'):
+            i = fc(i, output_channels=channel, w_dtype=vl, f_dtype=vl)
+
+        with g.name_scope('fc'):
+            prev = fc(i, output_channels=1000, w_dtype=vl, f_dtype=vl)
+        return g
+
+def get_mobilenet_v2_last_base(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+    '''
+    ResNet-18 first
+    '''
+    g = Graph('MobilenetV2-last', dataset='ImageNet', log_level=logging.INFO)
+    batch_size = 16
+    channel=1280
+
+    with g.as_default():
+        with g.name_scope('inputs'):
+            i = get_tensor(shape=(batch_size,channel,1,1), name='data', dtype=FQDtype.FXP8, trainable=False)
+        with g.name_scope('fc_base'):
+            i = fc(i, output_channels=channel, w_dtype=vl, f_dtype=vl)
+    return g
 
 def get_mobilenet_v1(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
     '''

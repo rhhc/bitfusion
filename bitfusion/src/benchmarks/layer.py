@@ -194,14 +194,20 @@ def get_bench_nn(bench_name, WRPN=False):
         with g.name_scope('inputs'):
             prev = get_tensor(shape=(batch_size, width, height, cin), name='data', dtype=FQDtype.FXP8, trainable=False)
 
-        with g.name_scope('conv1'):  # prepare
+        with g.name_scope('conv-b1'):  # prepare
             prev = conv(prev, filters=cin, kernel_size=1, stride=(1,1,1,1), pad='SAME', c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+
+        with g.name_scope('conv-b2'):  # prepare
+            prev = conv(prev, filters=cin, kernel_size=1, stride=(1,1,1,1), pad='SAME', c_dtype=fb, w_dtype=FQDtype.FXP8)
+
+        #with g.name_scope('conv-b3'):  # profile
+        #    prev = conv(prev, filters=cin, kernel_size=kernel_size, stride=stride, pad=pad, group=group, c_dtype=fb, w_dtype=wb)
 
         if 'base' in bench_name:
             return g
 
         with g.name_scope('conv2'):  # profile
-            prev = conv(prev, filters=cout, kernel_size=kernel_size, stride=stride, pad=pad, group=group, c_dtype=fb, w_dtype=wb)
+            prev = conv(prev, filters=cout, kernel_size=kernel_size, stride=stride, pad=pad, group=group, c_dtype=FQDtype.FXP8, w_dtype=wb)
 
     return g
 
@@ -213,11 +219,22 @@ benchlist = []
 
 def load_config():
     index = os.getenv('bitfusion_index')
+    case = 'test'
     try:
+        if 'resnet' in index:
+            case = 'resnet'
+            index = index.replace('resnet-', '')
+            index = index.replace('resnet_', '')
+        elif 'mobilenet' in index:
+            case = 'mobilenet'
+            index = index.replace('mobilenet_', '')
         index = int(index)
     except:
         index = None
-    print("Index", index)
+
+    if index is None:
+        index = 'whole'
+    print("Index: {}, case: {}".format(index, case))
 
     result = set()
     for root, dirnames, filenames in os.walk('models'):
@@ -225,7 +242,7 @@ def load_config():
         if root != 'models':
             continue
         for files in filenames:
-            if '.txt' not in files:
+            if '.txt' not in files and case not in files:
                 continue
             record = os.path.join(root, files)
             print("Processing file %s" % record)

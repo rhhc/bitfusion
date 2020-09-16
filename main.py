@@ -14,7 +14,7 @@ from bitfusion.src.sweep.sweep import SimulatorSweep, check_pandas_or_run
 from bitfusion.src.utils.utils import *
 from bitfusion.src.optimizer.optimizer import optimize_for_order, get_stats_fast
 
-def main(index=0):
+def main(index=0, case='test'):
     batch_size = 16
     
     results_dir = './results'
@@ -22,9 +22,7 @@ def main(index=0):
         os.makedirs(results_dir)
     
     #  if last result exists, the simulator would no generate new results
-    if index is None:
-        index = 'whole'
-    result_file = "bitfusion-abs-sim-sweep-%s.csv" % str(index)
+    result_file = "{}-bitfusion-abs-sim-sweep-{}.csv".format(case, index)
     if os.path.exists(os.path.join(results_dir, result_file)):
         os.remove(os.path.join(results_dir, result_file))
     
@@ -79,7 +77,7 @@ def main(index=0):
         return stats
     
     header = ["config", "latency(ms)", "power(mWatt)"]
-    profile_result = "%s/layer-wise-%s.csv" % (results_dir, str(index))
+    profile_result = "{}/{}-layer-wise-{}.csv".format(results_dir, case, index)
     with open(profile_result, 'wb') as f:
         w = csv.writer(f)
         w.writerows([header])
@@ -120,10 +118,21 @@ def main(index=0):
 
 if __name__ == '__main__':
     index = os.getenv('bitfusion_index')
+    case = 'test'
     try:
+        if 'resnet' in index:
+            case = 'resnet'
+            index = index.replace('resnet-', '')
+            index = index.replace('resnet_', '')
+        elif 'mobilenet' in index:
+            case = 'mobilenet'
+            index = index.replace('mobilenet_', '')
         index = int(index)
     except:
         index = None
-    print("Index", index)
-    main(index)
+
+    if index is None:
+        index = 'whole'
+    print("Index: {}, case: {}".format(index, case))
+    main(index, case)
 
