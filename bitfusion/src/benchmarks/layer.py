@@ -301,7 +301,7 @@ if __name__ == "__main__":
                     benchlist = bench[i*interval:]
             else:
                 benchlist = []
-        print("benchlist with index %d length: %d" % (i, len(benchlist)))
+            print("benchlist with index %d / %d length: %d" % (i, bucket + 1, len(benchlist)))
 else:
     bench, index, interval = load_config()
     if index is not None:
