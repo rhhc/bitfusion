@@ -217,6 +217,18 @@ def save_list(lists=None, filename=None):
 bucket = 10
 benchlist = []
 
+def load_missing(record="models/pytorch-resnet18.txt", result=set()):
+    with open(record) as f:
+        lines = f.readlines()
+        f.close()
+        for line in lines:
+            if 'not in dict' in line:
+                item = line.split()[2]
+                result.add(item)
+                result.add(item.replace('layer', 'base'))
+    return result
+
+
 def load_config():
     index = os.getenv('bitfusion_index')
     case = 'test'
@@ -227,7 +239,12 @@ def load_config():
             index = index.replace('resnet_', '')
         elif 'mobilenet' in index:
             case = 'mobilenet'
+            index = index.replace('mobilenet-', '')
             index = index.replace('mobilenet_', '')
+        elif 'missing' in index:
+            case = 'missing'
+            index = index.replace('missing-', '')
+            index = index.replace('missing_', '')
         index = int(index)
     except:
         index = None
@@ -246,7 +263,10 @@ def load_config():
                 continue
             record = os.path.join(root, files)
             print("Processing file %s" % record)
-            result = load_list(record=record, result=result)
+            if 'missing' in case:
+                result = load_missing(record=record, result=result)
+            else:
+                result = load_list(record=record, result=result)
             #break
     # reduce already profile one
     # convert to list and partition
@@ -263,20 +283,26 @@ def load_config():
 
 if __name__ == "__main__":
     bench, index, interval = load_config()
-    for i in range(bucket + 1):
-        if i*interval < len(bench):
-            if (i+1)*interval <= len(bench):
-                benchlist = bench[i*interval: i*interval + interval]
+    if index < 0:
+        benchlist = bench
+        print("benchlist with index %d length: %d" % (index, len(benchlist)))
+    else:
+        for i in range(bucket + 1):
+            if i*interval < len(bench):
+                if (i+1)*interval <= len(bench):
+                    benchlist = bench[i*interval: i*interval + interval]
+                else:
+                    benchlist = bench[i*interval:]
             else:
-                benchlist = bench[i*interval:]
-        else:
-            benchlist = []
+                benchlist = []
         print("benchlist with index %d length: %d" % (i, len(benchlist)))
 else:
     bench, index, interval = load_config()
     if index is not None:
         i = index
-        if i*interval < len(bench):
+        if i < 0:
+            benchlist = bench
+        elif i*interval < len(bench):
             if (i+1)*interval <= len(bench):
                 benchlist = bench[i*interval: i*interval + interval]
             else:

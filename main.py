@@ -126,7 +126,12 @@ if __name__ == '__main__':
             index = index.replace('resnet_', '')
         elif 'mobilenet' in index:
             case = 'mobilenet'
+            index = index.replace('mobilenet-', '')
             index = index.replace('mobilenet_', '')
+        elif 'missing' in index:
+            case = 'missing'
+            index = index.replace('missing-', '')
+            index = index.replace('missing_', '')
         index = int(index)
     except:
         index = None
