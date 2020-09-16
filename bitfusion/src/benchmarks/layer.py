@@ -194,8 +194,8 @@ def get_bench_nn(bench_name, WRPN=False):
         with g.name_scope('inputs'):
             prev = get_tensor(shape=(batch_size, width, height, cin), name='data', dtype=FQDtype.FXP8, trainable=False)
 
-        with g.name_scope('conv-b1'):  # prepare
-            prev = conv(prev, filters=cin, kernel_size=1, stride=(1,1,1,1), pad='SAME', c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
+        #with g.name_scope('conv-b1'):  # prepare
+        #    prev = conv(prev, filters=cin, kernel_size=1, stride=(1,1,1,1), pad='SAME', c_dtype=FQDtype.FXP8, w_dtype=FQDtype.FXP8)
 
         with g.name_scope('conv-b2'):  # prepare
             prev = conv(prev, filters=cin, kernel_size=1, stride=(1,1,1,1), pad='SAME', c_dtype=fb, w_dtype=FQDtype.FXP8)
