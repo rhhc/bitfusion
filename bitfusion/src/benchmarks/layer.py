@@ -214,7 +214,13 @@ def get_bench_nn(bench_name, WRPN=False):
 def save_list(lists=None, filename=None):
     assert len(lists) % 2 == 0, "list length should be even, but found %d" % len(lists)
 
-bucket = 10
+thread = os.getenv('bitfusion_thread')
+try:
+    bucket = int(thread)
+    if bucket < 2:
+        bucket = 10
+except:
+    bucket = 10
 benchlist = []
 
 def load_missing(record="models/pytorch-resnet18.txt", result=set()):
@@ -259,7 +265,7 @@ def load_config():
         if root != 'models':
             continue
         for files in filenames:
-            if '.txt' not in files and case not in files:
+            if '.txt' not in files or case not in files:
                 continue
             record = os.path.join(root, files)
             print("Processing file %s" % record)
@@ -283,9 +289,9 @@ def load_config():
 
 if __name__ == "__main__":
     bench, index, interval = load_config()
-    if index < 0:
+    if isinstance(index, str) or index < 0:
         benchlist = bench
-        print("benchlist with index %d length: %d" % (index, len(benchlist)))
+        print("benchlist with index {} length: {}".format(index, len(benchlist)))
     else:
         for i in range(bucket + 1):
             if i*interval < len(bench):
@@ -300,7 +306,7 @@ else:
     bench, index, interval = load_config()
     if index is not None:
         i = index
-        if i < 0:
+        if isinstance(index, str) or index < 0:
             benchlist = bench
         elif i*interval < len(bench):
             if (i+1)*interval <= len(bench):
@@ -309,7 +315,7 @@ else:
                 benchlist = bench[i*interval:]
         else:
             benchlist = []
-        print("benchlist with index %d length: %d" % (i, len(benchlist)))
+        print("benchlist with index {} length: {}".format(index, len(benchlist)))
 
 
 
