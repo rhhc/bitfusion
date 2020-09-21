@@ -54,16 +54,17 @@ benchlist = [\
              #'LeNet-5', \
              #'VGG-7', \
              #'RESNET-18-twn', \
+             'RESNET-18-4bit', \
              #'RESNET-18-8bit', \
              #'RESNET-18-8bit-no-classifier', \
              #'RESNET-18-a8w8', \
              #'RESNET-18-a4w8', \
              #'RESNET-18-a2w8', \
              #'RESNET-50-8bit', \
-             'RESNET-18-first', \
-             'RESNET-50-first', \
-             'RESNET-18-first-layer', \
-             'RESNET-18-first-base', \
+             #'RESNET-18-first', \
+             #'RESNET-50-first', \
+             #'RESNET-18-first-layer', \
+             #'RESNET-18-first-base', \
              #'RESNET-18-last-layer', \
              #'RESNET-18-last-base', \
              #'RESNET-50-last-layer', \
@@ -78,6 +79,7 @@ benchlist = [\
              #'Mobilenet-V2-last-base', \
              #'Mobilenet-V1-4bit', \
              #'Mobilenet-V1-8bit', \
+             'Mobilenet-V2-6bit', \
              #'Mobilenet-V2-8bit', \
              #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_2-wb_2-layer', \
              #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_2-wb_2-base',  \
@@ -123,6 +125,8 @@ def get_bench_nn(bench_name, WRPN=False):
             return get_resnet_18_wrpn()
         else:
             return get_resnet_18_twn()
+    elif bench_name == 'RESNET-18-4bit':
+        return get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP4, wb=FQDtype.FXP4)
     elif bench_name == 'RESNET-18-8bit':
         return get_resnet_18()
     elif bench_name == 'RESNET-18-8bit-no-classifier':
@@ -173,6 +177,8 @@ def get_bench_nn(bench_name, WRPN=False):
         return get_mobilenet_v1(hl=FQDtype.FXP4)
     elif bench_name == 'Mobilenet-V1-8bit':
         return get_mobilenet_v1()
+    elif bench_name == 'Mobilenet-V2-6bit':
+        return get_mobilenet_v2(hl=FQDtype.FXP6)
     elif bench_name == 'Mobilenet-V2-8bit':
         return get_mobilenet_v2()
     elif 'base' in bench_name or 'layer' in bench_name:
@@ -904,7 +910,7 @@ def get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP8, wb=FQDtype.FXP8, classifier=
             i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
 
         with g.name_scope('conv_stem'):
-            conv_stem = conv(i, filters=inplanes, kernel_size=7, pad='SAME', stride=(1,2,2,1), c_dtype=vl, w_dtype=vl)
+            conv_stem = conv(i, filters=inplanes, kernel_size=7, pad='SAME', stride=(1,2,2,1), c_dtype=fb, w_dtype=vl)
 
         if first:
             return g
@@ -1183,8 +1189,7 @@ def get_mobilenet_v2(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
             i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
 
         with g.name_scope('conv0'):
-            conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1),
-                    c_dtype=vl, w_dtype=vl)
+            conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1), c_dtype=hl, w_dtype=vl)
 
         prev = conv1
         with g.name_scope('feature'):
