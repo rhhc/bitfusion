@@ -8,16 +8,10 @@ from dnnweaver2 import get_tensor
 from dnnweaver2.scalar.dtypes import FQDtype, FixedPoint
 
 
-def fc(tensor_in, output_channels=1024,
-        f_dtype=None, w_dtype=None,
-        act='linear'):
+def fc(tensor_in, output_channels=1024, f_dtype=None, w_dtype=None, act='linear'):
     input_channels = tensor_in.shape[-1]
-    weights = get_tensor(shape=(output_channels, input_channels),
-            name='weights',
-            dtype=w_dtype)
-    biases = get_tensor(shape=(output_channels,),
-            name='biases',
-            dtype=FixedPoint(32,w_dtype.frac_bits + tensor_in.dtype.frac_bits))
+    weights = get_tensor(shape=(output_channels, input_channels), name='weights', dtype=w_dtype)
+    biases = get_tensor(shape=(output_channels,), name='biases', dtype=FixedPoint(32, w_dtype.frac_bits + tensor_in.dtype.frac_bits))
     _fc = matmul(tensor_in, weights, biases, dtype=f_dtype)
 
     if act == 'leakyReLU':
@@ -31,21 +25,15 @@ def fc(tensor_in, output_channels=1024,
 
     return act
 
-def conv(tensor_in, filters=32, stride=None, kernel_size=3, pad='SAME', group=1,
-        c_dtype=None, w_dtype=None,
-        act='linear'):
+def conv(tensor_in, filters=32, stride=None, kernel_size=3, pad='SAME', group=1, c_dtype=None, w_dtype=None, act='linear'):
 
     if stride is None:
         stride = (1,1,1,1)
 
     input_channels = tensor_in.shape[-1]
 
-    weights = get_tensor(shape=(filters, kernel_size, kernel_size, input_channels),
-                         name='weights',
-                         dtype=w_dtype)
-    biases = get_tensor(shape=(filters),
-                         name='biases',
-                         dtype=FixedPoint(32,w_dtype.frac_bits + tensor_in.dtype.frac_bits))
+    weights = get_tensor(shape=(filters, kernel_size, kernel_size, input_channels), name='weights', dtype=w_dtype)
+    biases = get_tensor(shape=(filters), name='biases', dtype=FixedPoint(32, w_dtype.frac_bits + tensor_in.dtype.frac_bits))
     _conv = conv2D(tensor_in, weights, biases, stride=stride, pad=pad, group=group, dtype=c_dtype)
 
     if act == 'leakyReLU':
@@ -67,12 +55,15 @@ benchlist = [\
              #'VGG-7', \
              #'RESNET-18-twn', \
              #'RESNET-18-8bit', \
+             #'RESNET-18-8bit-no-classifier', \
              #'RESNET-18-a8w8', \
              #'RESNET-18-a4w8', \
              #'RESNET-18-a2w8', \
              #'RESNET-50-8bit', \
-             #'RESNET-18-first-layer', \
-             #'RESNET-18-first-base', \
+             'RESNET-18-first', \
+             'RESNET-50-first', \
+             'RESNET-18-first-layer', \
+             'RESNET-18-first-base', \
              #'RESNET-18-last-layer', \
              #'RESNET-18-last-base', \
              #'RESNET-50-last-layer', \
@@ -80,10 +71,10 @@ benchlist = [\
              #'RNN', \
              #'LSTM', \
              #'Mobilenet-V1-first-layer', \
-             #'Mobilenet-V1-last-layer', \
-             #'Mobilenet-V2-last-layer', \
              #'Mobilenet-V1-first-base', \
+             #'Mobilenet-V1-last-layer', \
              #'Mobilenet-V1-last-base', \
+             #'Mobilenet-V2-last-layer', \
              #'Mobilenet-V2-last-base', \
              #'Mobilenet-V1-4bit', \
              #'Mobilenet-V1-8bit', \
@@ -98,8 +89,12 @@ benchlist = [\
              #'width_56-height_56-cin_24-cout_52-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_2-base',  \
              #'width_14-height_14-cin_180-cout_12-kernel_3-stride_2-pad_SAME-group_1-fb_4-wb_8-layer', \
              #'width_14-height_14-cin_180-cout_12-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_8-layer', \
+             #'width_14-height_14-cin_180-cout_12-kernel_3-stride_2-pad_SAME-group_1-fb_4-wb_2-layer', \
+             #'width_14-height_14-cin_180-cout_12-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_2-layer', \
              #'width_14-height_14-cin_180-cout_12-kernel_3-stride_2-pad_SAME-group_1-fb_4-wb_8-base', \
              #'width_14-height_14-cin_180-cout_12-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_8-base', \
+             #'width_14-height_14-cin_180-cout_12-kernel_3-stride_2-pad_SAME-group_1-fb_4-wb_2-base', \
+             #'width_14-height_14-cin_180-cout_12-kernel_3-stride_1-pad_SAME-group_1-fb_8-wb_2-base', \
             ]
 
 try:
@@ -130,6 +125,8 @@ def get_bench_nn(bench_name, WRPN=False):
             return get_resnet_18_twn()
     elif bench_name == 'RESNET-18-8bit':
         return get_resnet_18()
+    elif bench_name == 'RESNET-18-8bit-no-classifier':
+        return get_resnet_18(classifier=False)
     elif bench_name == 'RESNET-18-a8w8':
         return get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP8, wb=FQDtype.FXP8)
     elif bench_name == 'RESNET-18-a4w8':
@@ -138,6 +135,10 @@ def get_bench_nn(bench_name, WRPN=False):
         return get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP2, wb=FQDtype.FXP8)
     elif bench_name == 'RESNET-50-8bit':
         return get_resnet_50()
+    elif bench_name == 'RESNET-18-first':
+        return get_resnet_18(first=True)
+    elif bench_name == 'RESNET-50-first':
+        return get_resnet_50(first=True)
     elif bench_name == 'RESNET-18-first-layer':
         return get_resnet_18_first_layer()
     elif bench_name == 'RESNET-18-first-base':
@@ -168,6 +169,8 @@ def get_bench_nn(bench_name, WRPN=False):
         return get_mobilenet_v1_last_layer()
     elif bench_name == 'Mobilenet-V2-last-layer':
         return get_mobilenet_v2_last_layer()
+    elif bench_name == 'Mobilenet-V1-4bit':
+        return get_mobilenet_v1(hl=FQDtype.FXP4)
     elif bench_name == 'Mobilenet-V1-8bit':
         return get_mobilenet_v1()
     elif bench_name == 'Mobilenet-V2-8bit':
@@ -632,8 +635,7 @@ def get_resnet_18_twn():
             i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
 
         with g.name_scope('conv1_a'):
-            conv1_a = conv(i, filters=64, kernel_size=7, pad='SAME', stride=(1,2,2,1),
-                    c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP8)
+            conv1_a = conv(i, filters=64, kernel_size=7, pad='SAME', stride=(1,2,2,1), c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP8)
         with g.name_scope('pool1_a'):
             pool1_a = maxPool(conv1_a, pooling_kernel=(1,2,2,1), stride=(1,2,2,1), pad='VALID')
 
@@ -644,11 +646,9 @@ def get_resnet_18_twn():
                 else:
                     prev = conv2_b
                 with g.name_scope('conv2_{}_a'.format(i)):
-                    conv2_a = conv(prev, filters=64, kernel_size=1, pad='SAME',
-                                c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
+                    conv2_a = conv(prev, filters=64, kernel_size=1, pad='SAME', c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
                 with g.name_scope('conv2_{}_b'.format(i)):
-                    conv2_b = conv(conv2_a, filters=64, kernel_size=3, pad='SAME',
-                            c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
+                    conv2_b = conv(conv2_a, filters=64, kernel_size=3, pad='SAME', c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
 
         with g.name_scope('add2'):
             add2 = add((conv2_a, conv2_b))
@@ -662,11 +662,9 @@ def get_resnet_18_twn():
                     prev = conv3_b
                     stride = (1,1,1,1)
                 with g.name_scope('conv3_{}_a'.format(i)):
-                    conv3_a = conv(prev, filters=128, kernel_size=1, pad='SAME', stride=stride,
-                                c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
+                    conv3_a = conv(prev, filters=128, kernel_size=1, pad='SAME', stride=stride, c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
                 with g.name_scope('conv3_{}_b'.format(i)):
-                    conv3_b = conv(conv3_a, filters=128, kernel_size=3, pad='SAME',
-                            c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
+                    conv3_b = conv(conv3_a, filters=128, kernel_size=3, pad='SAME', c_dtype=FQDtype.FXP4, w_dtype=FQDtype.FXP4)
 
         with g.name_scope('add3'):
             add3 = add((conv3_a, conv3_b))
@@ -803,7 +801,7 @@ def get_resnet_18_first_layer(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
             i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
 
         with g.name_scope('conv_base'):
-            i = conv(i, filters=3, kernel_size=1, pad='SAME', stride=(1,1,1,1),  c_dtype=vl, w_dtype=vl)
+            i = conv(i, filters=8, kernel_size=3, pad='SAME', stride=(1,1,1,1),  c_dtype=vl, w_dtype=vl)
 
         with g.name_scope('conv_stem'):
             conv_stem = conv(i, filters=64, kernel_size=7, pad='SAME', stride=(1,2,2,1), c_dtype=vl, w_dtype=vl)
@@ -821,7 +819,7 @@ def get_resnet_18_first_base(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
             i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
 
         with g.name_scope('conv_base'):
-            i = conv(i, filters=3, kernel_size=1, pad='SAME', stride=(1,1,1,1),  c_dtype=vl, w_dtype=vl)
+            i = conv(i, filters=8, kernel_size=3, pad='SAME', stride=(1,1,1,1),  c_dtype=vl, w_dtype=vl)
         return g
 
 def get_resnet_18_last_layer(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
@@ -890,7 +888,7 @@ def get_resnet_50_last_base(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
             i = fc(i, output_channels=2048, w_dtype=vl, f_dtype=vl)
         return g
 
-def get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP8, wb=FQDtype.FXP8):
+def get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP8, wb=FQDtype.FXP8, classifier=True, first=False):
     '''
     ResNet-18
     '''
@@ -898,20 +896,24 @@ def get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP8, wb=FQDtype.FXP8):
     batch_size = 16
 
     config = [2, 2, 2, 2]
+    expansion = 1
+    inplanes = 64
 
     with g.as_default():
         with g.name_scope('inputs'):
             i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
 
         with g.name_scope('conv_stem'):
-            conv_stem = conv(i, filters=64, kernel_size=7, pad='SAME', stride=(1,2,2,1),
-                    c_dtype=vl, w_dtype=vl)
+            conv_stem = conv(i, filters=inplanes, kernel_size=7, pad='SAME', stride=(1,2,2,1), c_dtype=vl, w_dtype=vl)
+
+        if first:
+            return g
+
         with g.name_scope('pool_stem'):
             pool_stem = maxPool(conv_stem, pooling_kernel=(1,2,2,1), stride=(1,2,2,1), pad='VALID')
             prev = pool_stem
 
-        expansion = 1
-        inplanes = 64
+        in_channel = inplanes
         for i, blocks in enumerate(config):
             channel_scale = 2 ** i
             outplanes = inplanes * channel_scale
@@ -923,22 +925,25 @@ def get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP8, wb=FQDtype.FXP8):
             with g.name_scope('layer{}'.format(i)):
                 for j, stride in enumerate(strides):
                     # BasicBlock on ##
-                    enable_skip = stride != 1 or inplanes != outplanes * expansion
+                    print('cin cout', in_channel, outplanes * expansion)
+                    enable_skip = stride != 1 or in_channel != outplanes * expansion
                     with g.name_scope('conv{}_{}a'.format(i, j)):
                         output = conv(prev, filters=outplanes, kernel_size=3, pad='SAME', stride=(1,stride,stride,1), c_dtype=fb, w_dtype=wb)
                     with g.name_scope('conv{}_{}b'.format(i, j)):
                         output = conv(output, filters=outplanes, kernel_size=3, pad='SAME', stride=(1,1,1,1), c_dtype=fb, w_dtype=wb)
                     if enable_skip:
                         with g.name_scope('conv{}_{}d'.format(i, j)):
-                            residual = conv(prev, filters=outplanes*expansion, kernel_size=1, pad='SAME', stride=(1,stride,stride,1),
-                                    c_dtype=fb, w_dtype=wb)
+                            residual = conv(prev, filters=outplanes*expansion, kernel_size=1, pad='SAME', stride=(1,stride,stride,1), c_dtype=fb, w_dtype=wb)
                     else:
                         residual = prev
 
                     with g.name_scope('add{}_{}'.format(i, j)):
                         prev = add((residual, output))
-                    inplanes = outplanes * expansion
+                    in_channel = outplanes * expansion
                     # BasicBlock off ##
+
+        if classifier == False:
+            return g
 
         with g.name_scope('fc'):
             prev = maxPool(prev, pooling_kernel=(1,7,7,1), stride=(1,7,7,1), pad='VALID') # TODO add average
@@ -947,7 +952,7 @@ def get_resnet_18(vl=FQDtype.FXP8, fb=FQDtype.FXP8, wb=FQDtype.FXP8):
 
         return g
 
-def get_resnet_50(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
+def get_resnet_50(vl=FQDtype.FXP8, hl=FQDtype.FXP8, first=False):
     '''
     ResNet-50
     '''
@@ -955,20 +960,25 @@ def get_resnet_50(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
     batch_size = 16
 
     config = [3, 4, 6, 3]
+    expansion = 4
+    inplanes = 64
 
     with g.as_default():
         with g.name_scope('inputs'):
             i = get_tensor(shape=(batch_size,224,224,3), name='data', dtype=FQDtype.FXP8, trainable=False)
 
         with g.name_scope('conv_stem'):
-            conv_stem = conv(i, filters=64, kernel_size=7, pad='SAME', stride=(1,2,2,1),
+            conv_stem = conv(i, filters=inplanes, kernel_size=7, pad='SAME', stride=(1,2,2,1),
                     c_dtype=vl, w_dtype=vl)
+
+        if first:
+            return g
+
         with g.name_scope('pool_stem'):
             pool_stem = maxPool(conv_stem, pooling_kernel=(1,2,2,1), stride=(1,2,2,1), pad='VALID')
             prev = pool_stem
 
-        expansion = 4
-        inplanes = 64
+        in_channel = inplanes
         for i, blocks in enumerate(config):
             channel_scale = 2 ** i
             outplanes = inplanes * channel_scale
@@ -980,7 +990,8 @@ def get_resnet_50(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
             with g.name_scope('layer{}'.format(i)):
                 for j, stride in enumerate(strides):
                     # BottleNeck on ##
-                    enable_skip = stride != 1 or inplanes != outplanes * expansion
+                    print('cin cout', in_channel, outplanes * expansion)
+                    enable_skip = stride != 1 or in_channel != outplanes * expansion
                     with g.name_scope('conv{}_{}a'.format(i, j)):
                         output = conv(prev, filters=outplanes, kernel_size=1, pad='SAME', c_dtype=hl, w_dtype=hl)
                     with g.name_scope('conv{}_{}b'.format(i, j)):
@@ -996,7 +1007,7 @@ def get_resnet_50(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
 
                     with g.name_scope('add{}_{}'.format(i, j)):
                         prev = add((residual, output))
-                    inplanes = outplanes * expansion
+                    in_channel = outplanes * expansion
                     # BottleNeck off ##
 
         with g.name_scope('fc'):
@@ -1122,6 +1133,7 @@ def get_mobilenet_v1(vl=FQDtype.FXP8, hl=FQDtype.FXP8):
             conv1 = conv(i, filters=channel, kernel_size=3, pad='SAME', stride=(1,2,2,1),
                     c_dtype=vl, w_dtype=vl)
 
+        #return g
         prev = conv1
         with g.name_scope('feature'):
             for i, (c, s) in enumerate(config):

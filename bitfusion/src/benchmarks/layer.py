@@ -227,11 +227,14 @@ def load_missing(record="models/pytorch-resnet18.txt", result=set()):
     with open(record) as f:
         lines = f.readlines()
         f.close()
+        count = 0
         for line in lines:
             if 'not in dict' in line:
                 item = line.split()[2]
                 result.add(item)
                 result.add(item.replace('layer', 'base'))
+                count = count + 1
+    print("load {} item from the file, current result length {}".format(count, len(result)))
     return result
 
 
