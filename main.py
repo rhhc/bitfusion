@@ -99,7 +99,8 @@ def main(index=0, case='test'):
                 base_bf_e_time = base_bf_e_cycles / 500.e3 / 16
                 base_bf_e_energy = base_bf_e_stats.get_energy(bf_e_sim.get_energy_cost()) * (batch_size / 16.)
                 #base_bf_e_power = base_bf_e_energy / bf_e_time * 1.e-9
-                #print('Debug: layer vs base %r %r %r' % (bf_e_time, base_bf_e_time, type(bf_e_time)))
+                print('Debug: time cost of layer vs base %r %r' % (bf_e_time, base_bf_e_time))
+                print('Debug: energy cost of layer vs base %r %r' % (bf_e_energy, base_bf_e_energy))
             else:
                 base_bf_e_time = 0
                 base_bf_e_energy = 0
