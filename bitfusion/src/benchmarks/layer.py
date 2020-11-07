@@ -7,7 +7,7 @@ import re
 from dnnweaver2.graph import Graph, get_default_graph
 from dnnweaver2 import get_tensor
 from dnnweaver2.scalar.dtypes import FQDtype, FixedPoint
-from benchmarks import fc, conv
+from bitfusion.src.benchmarks.benchmarks import fc, conv
 
 def obtainInt(l):
     lists = []

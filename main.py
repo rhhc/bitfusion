@@ -1,11 +1,9 @@
+import argparse
 import pandas
 import os
 import numpy as np
 import sys
 import csv
-sys.path.insert(0, '../dnnweaver2')
-print(sys.version_info)
-import dnnweaver2
 
 import bitfusion.src.benchmarks.benchmarks as benchmarks
 from bitfusion.src.simulator.stats import Stats
@@ -14,7 +12,7 @@ from bitfusion.src.sweep.sweep import SimulatorSweep, check_pandas_or_run
 from bitfusion.src.utils.utils import *
 from bitfusion.src.optimizer.optimizer import optimize_for_order, get_stats_fast
 
-def main(index=0):
+def main(args):
     batch_size = 16
     
     results_dir = './results'
@@ -22,7 +20,7 @@ def main(index=0):
         os.makedirs(results_dir)
     
     #  if last result exists, the simulator would no generate new results
-    result_file = "bitfusion-abs-sim-sweep-%d.csv" % index
+    result_file = "bitfusion-abs-sim-sweep-{}.csv".format(args.index)
     if os.path.exists(os.path.join(results_dir, result_file)):
         os.remove(os.path.join(results_dir, result_file))
     
@@ -113,11 +111,9 @@ def main(index=0):
     
 
 if __name__ == '__main__':
-    index = os.getenv('bitfusion_index')
-    try:
-        index = int(index)
-    except:
-        index = None
-    print("Index", index)
-    main(index)
+    parser = argparse.ArgumentParser(description='BitFusin Simulating')
+    parser.add_argument('-i', '--index', default=1, type=int, metavar='N',
+                        help='??????')
+    args = parser.parse_args()
+    main(args)
 

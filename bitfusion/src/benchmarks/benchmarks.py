@@ -76,7 +76,7 @@ benchlist = [\
             ]
 
 try:
-    import layer
+    import bitfusion.src.benchmarks.layer
     benchlist += layer.benchlist
     print("benchlist length is %d in benchmarks.py" % len(benchlist))
 except (NameError, IOError) as e:
