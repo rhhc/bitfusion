@@ -4,7 +4,6 @@ import os
 import numpy as np
 import sys
 import csv
-
 import bitfusion.src.benchmarks.benchmarks as benchmarks
 from bitfusion.src.simulator.stats import Stats
 from bitfusion.src.simulator.simulator import Simulator
@@ -12,54 +11,55 @@ from bitfusion.src.sweep.sweep import SimulatorSweep, check_pandas_or_run
 from bitfusion.src.utils.utils import *
 from bitfusion.src.optimizer.optimizer import optimize_for_order, get_stats_fast
 
+
 def main(args):
     batch_size = 16
-    
+
     results_dir = './results'
     if not os.path.exists(results_dir):
         os.makedirs(results_dir)
-    
+
     #  if last result exists, the simulator would no generate new results
     result_file = "bitfusion-abs-sim-sweep-{}.csv".format(args.index)
     if os.path.exists(os.path.join(results_dir, result_file)):
         os.remove(os.path.join(results_dir, result_file))
-    
+
     # BitFusion configuration file
     config_file = 'bf_e_conf.ini'
-    
+
     # Create simulator object
-    verbose = False
-    bf_e_sim = Simulator(config_file, verbose)
+    bf_e_sim = Simulator(config_file, args.debug)
     bf_e_energy_costs = bf_e_sim.get_energy_cost()
     print(bf_e_sim)
-    
+
     energy_tuple = bf_e_energy_costs
     print('')
     print('*'*50)
     print(energy_tuple)
     sim_sweep_columns = ['N', 'M',
-            'Max Precision (bits)', 'Min Precision (bits)',
-            'Network', 'Layer',
-            'Cycles', 'Memory wait cycles',
-            'WBUF Read', 'WBUF Write',
-            'OBUF Read', 'OBUF Write',
-            'IBUF Read', 'IBUF Write',
-            'DRAM Read', 'DRAM Write',
-            'Bandwidth (bits/cycle)',
-            'WBUF Size (bits)', 'OBUF Size (bits)', 'IBUF Size (bits)',
-            'Batch size']
-    
+                         'Max Precision (bits)', 'Min Precision (bits)',
+                         'Network', 'Layer',
+                         'Cycles', 'Memory wait cycles',
+                         'WBUF Read', 'WBUF Write',
+                         'OBUF Read', 'OBUF Write',
+                         'IBUF Read', 'IBUF Write',
+                         'DRAM Read', 'DRAM Write',
+                         'Bandwidth (bits/cycle)',
+                         'WBUF Size (bits)', 'OBUF Size (bits)', 'IBUF Size (bits)',
+                         'Batch size']
+
     bf_e_sim_sweep_csv = os.path.join(results_dir, result_file)
     if os.path.exists(bf_e_sim_sweep_csv):
         bf_e_sim_sweep_df = pandas.read_csv(bf_e_sim_sweep_csv)
     else:
         bf_e_sim_sweep_df = pandas.DataFrame(columns=sim_sweep_columns)
     print('Got BitFusion Eyeriss, Numbers')
-    
-    bf_e_results = check_pandas_or_run(bf_e_sim, bf_e_sim_sweep_df, bf_e_sim_sweep_csv, batch_size=batch_size)
-    bf_e_results = bf_e_results.groupby('Network',as_index=False).agg(np.sum)
+
+    bf_e_results = check_pandas_or_run(
+        bf_e_sim, bf_e_sim_sweep_df, bf_e_sim_sweep_csv, batch_size=batch_size)
+    bf_e_results = bf_e_results.groupby('Network', as_index=False).agg(np.sum)
     area_stats = bf_e_sim.get_area()
-    
+
     def df_to_stats(df):
         stats = Stats()
         stats.total_cycles = float(df['Cycles'])
@@ -73,47 +73,54 @@ def main(args):
         stats.writes['wgt'] = float(df['WBUF Write'])
         stats.writes['dram'] = float(df['DRAM Write'])
         return stats
-    
+
     header = ["config", "latency(ms)", "power(mWatt)"]
-    profile_result = "results/layer-wise-%d.csv" % index
-    with open(profile_result, 'wb') as f:
-        w = csv.writer(f)
+    profile_result = "results/layer-wise-%d.csv" % args.index
+    with open(profile_result, 'w') as csvfile:
+        w = csv.writer(csvfile)
         w.writerows([header])
-    
-        print("benchlist length %d" % len(benchmarks.benchlist))
-        for bench in benchmarks.benchlist:
+
+        benchlist = benchmarks.get_benchlist(args.index)
+        print("benchlist length %d" % len(benchlist))
+        for bench in benchlist:
             if 'base' in bench:
                 continue
-    
-            bf_e_stats = df_to_stats(bf_e_results.loc[bf_e_results['Network'] == bench])
+
+            bf_e_stats = df_to_stats(
+                bf_e_results.loc[bf_e_results['Network'] == bench])
             bf_e_cycles = bf_e_stats.total_cycles * (batch_size / 16.)
             bf_e_time = bf_e_cycles / 500.e3 / 16
-            bf_e_energy = bf_e_stats.get_energy(bf_e_sim.get_energy_cost()) * (batch_size / 16.)
+            bf_e_energy = bf_e_stats.get_energy(
+                bf_e_sim.get_energy_cost()) * (batch_size / 16.)
             #bf_e_power = bf_e_energy / bf_e_time * 1.e-9
-    
-            base_bf_e_stats = df_to_stats(bf_e_results.loc[bf_e_results['Network'] == bench.replace('layer', 'base')])
-            base_bf_e_cycles = base_bf_e_stats.total_cycles * (batch_size / 16.)
+
+            base_bf_e_stats = df_to_stats(
+                bf_e_results.loc[bf_e_results['Network'] == bench.replace('layer', 'base')])
+            base_bf_e_cycles = base_bf_e_stats.total_cycles * \
+                (batch_size / 16.)
             base_bf_e_time = base_bf_e_cycles / 500.e3 / 16
-            base_bf_e_energy = base_bf_e_stats.get_energy(bf_e_sim.get_energy_cost()) * (batch_size / 16.)
+            base_bf_e_energy = base_bf_e_stats.get_energy(
+                bf_e_sim.get_energy_cost()) * (batch_size / 16.)
             #base_bf_e_power = base_bf_e_energy / bf_e_time * 1.e-9
-    
+
             latency = bf_e_time - base_bf_e_time
             energy = bf_e_energy - base_bf_e_energy
             power = energy / latency * 1.e-9
-    
+
             w.writerows([[bench, latency, power]])
-    
+
             print('*'*50)
             print('Benchmark: {}'.format(bench))
-            print('BitFusion time: {} ms'.format(latency))    
+            print('BitFusion time: {} ms'.format(latency))
             print('BitFusion power: {} mWatt'.format(power*1.e3*16))
             print('*'*50)
-    
+
 
 if __name__ == '__main__':
-    parser = argparse.ArgumentParser(description='BitFusin Simulating')
+    parser = argparse.ArgumentParser(description='BitFusion Simulating')
     parser.add_argument('-i', '--index', default=1, type=int, metavar='N',
                         help='??????')
+    parser.add_argument('--debug', default=False, action='store_true',
+                        help='enable debug mode')
     args = parser.parse_args()
     main(args)
-

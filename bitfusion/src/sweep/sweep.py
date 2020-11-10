@@ -6,6 +6,7 @@ from bitfusion.src.simulator.simulator import Simulator
 from bitfusion.src.utils.utils import lookup_pandas_dataframe
 import bitfusion.src.benchmarks.benchmarks as benchmarks
 
+
 class SimulatorSweep(object):
     def __init__(self, csv_filename, config_file='conf.ini', verbose=False):
         self.sim_obj = Simulator(config_file, verbose=False)
@@ -18,15 +19,15 @@ class SimulatorSweep(object):
         self.logger.setLevel(log_level)
 
         self.columns = ['N', 'M', 'Max Precision (bits)', 'Min Precision (bits)',
-                'Network', 'Layer',
-                'Cycles', 'Memory wait cycles',
-                'WBUF Read', 'WBUF Write',
-                'OBUF Read', 'OBUF Write',
-                'IBUF Read', 'IBUF Write',
-                'DRAM Read', 'DRAM Write',
-                'Bandwidth (bits/cycle)',
-                'WBUF Size (bits)', 'OBUF Size (bits)', 'IBUF Size (bits)',
-                'Batch size']
+                        'Network', 'Layer',
+                        'Cycles', 'Memory wait cycles',
+                        'WBUF Read', 'WBUF Write',
+                        'OBUF Read', 'OBUF Write',
+                        'IBUF Read', 'IBUF Write',
+                        'DRAM Read', 'DRAM Write',
+                        'Bandwidth (bits/cycle)',
+                        'WBUF Size (bits)', 'OBUF Size (bits)', 'IBUF Size (bits)',
+                        'Batch size']
 
         if os.path.exists(csv_filename):
             self.sweep_df = pandas.read_csv(csv_filename)
@@ -52,7 +53,7 @@ class SimulatorSweep(object):
             list_bw = [sim_obj.accelerator.mem_if_width]
 
         if list_bench is None:
-            list_bench = benchmarks.benchlist
+            list_bench = benchmarks.benchlist  # todo
 
         if list_wbuf is None:
             list_wbuf = [sim_obj.accelerator.sram['wgt']]
@@ -97,38 +98,52 @@ class SimulatorSweep(object):
                                                 lookup_dict['OBUF Size (bits)'] = obuf
                                                 lookup_dict['IBUF Size (bits)'] = ibuf
                                                 lookup_dict['Batch size'] = batch_size
-                                                results = lookup_pandas_dataframe(self.sweep_df, lookup_dict)
-                                                nn = benchmarks.get_bench_nn(b, WRPN=True)
+                                                results = lookup_pandas_dataframe(
+                                                    self.sweep_df, lookup_dict)
+                                                nn = benchmarks.get_bench_nn(
+                                                    b, WRPN=True)
                                                 if len(results) == 0:
-                                                    self.logger.info('Simulating Benchmark: {}'.format(b))
-                                                    self.logger.info('N x M = {} x {}'.format(n, m))
-                                                    self.logger.info('Max Precision (bits): {}'.format(pmax))
-                                                    self.logger.info('Min Precision (bits): {}'.format(pmin))
-                                                    self.logger.info('Batch size: {}'.format(batch_size))
-                                                    self.logger.info('Bandwidth (bits/cycle): {}'.format(bw))
-                                                    stats = benchmarks.get_bench_numbers(nn, sim_obj, batch_size)
+                                                    self.logger.info(
+                                                        'Simulating Benchmark: {}'.format(b))
+                                                    self.logger.info(
+                                                        'N x M = {} x {}'.format(n, m))
+                                                    self.logger.info(
+                                                        'Max Precision (bits): {}'.format(pmax))
+                                                    self.logger.info(
+                                                        'Min Precision (bits): {}'.format(pmin))
+                                                    self.logger.info(
+                                                        'Batch size: {}'.format(batch_size))
+                                                    self.logger.info(
+                                                        'Bandwidth (bits/cycle): {}'.format(bw))
+                                                    stats = benchmarks.get_bench_numbers(
+                                                        nn, sim_obj, batch_size)
                                                     for layer in stats:
                                                         cycles = stats[layer].total_cycles
                                                         reads = stats[layer].reads
                                                         writes = stats[layer].writes
                                                         stalls = stats[layer].mem_stall_cycles
-                                                        data_line.append((n,m,pmax,pmin,b,layer,
-                                                            cycles,stalls,
-                                                            reads['wgt'],writes['wgt'],
-                                                            reads['out'],writes['out'],
-                                                            reads['act'],writes['act'],
-                                                            reads['dram'],writes['dram'],
-                                                            sim_obj.accelerator.mem_if_width,
-                                                            wbuf, obuf, ibuf, batch_size))
+                                                        data_line.append((n, m, pmax, pmin, b, layer,
+                                                                          cycles, stalls,
+                                                                          reads['wgt'], writes['wgt'],
+                                                                          reads['out'], writes['out'],
+                                                                          reads['act'], writes['act'],
+                                                                          reads['dram'], writes['dram'],
+                                                                          sim_obj.accelerator.mem_if_width,
+                                                                          wbuf, obuf, ibuf, batch_size))
                                             if len(data_line) > 0:
                                                 if os.path.exists(self.csv_filename):
-                                                    self.sweep_df = pandas.read_csv(self.csv_filename)
+                                                    self.sweep_df = pandas.read_csv(
+                                                        self.csv_filename)
                                                 else:
-                                                    self.sweep_df = pandas.DataFrame(columns=self.columns)
-                                                self.sweep_df = self.sweep_df.append(pandas.DataFrame(data_line, columns=self.columns))
-                                                self.sweep_df.to_csv(self.csv_filename, index=False)
+                                                    self.sweep_df = pandas.DataFrame(
+                                                        columns=self.columns)
+                                                self.sweep_df = self.sweep_df.append(
+                                                    pandas.DataFrame(data_line, columns=self.columns))
+                                                self.sweep_df.to_csv(
+                                                    self.csv_filename, index=False)
                                                 data_line = []
         return self.sweep_df
+
 
 def check_pandas_or_run(sim, dataframe, sim_sweep_csv, batch_size=1, config_file='./conf.ini'):
     ld = {}
@@ -151,4 +166,3 @@ def check_pandas_or_run(sim, dataframe, sim_sweep_csv, batch_size=1, config_file
         return lookup_pandas_dataframe(dataframe, ld)
     else:
         return results
-

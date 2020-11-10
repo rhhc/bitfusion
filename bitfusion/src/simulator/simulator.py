@@ -28,9 +28,7 @@ class Simulator(object):
         """
         # custom energy cost
         self.energy_costs = energy_costs
-
         self.config_file = config_file
-
         self.config = ConfigParser.ConfigParser()
         self.config.read(config_file)
 
