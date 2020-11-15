@@ -1,0 +1,3 @@
+[submodule "bitfusion/sram/cacti"]
+	path = bitfusion/sram/cacti
+	url = https://github.com/HewlettPackard/cacti.git
