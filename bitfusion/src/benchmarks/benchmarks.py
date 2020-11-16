@@ -63,9 +63,9 @@ def conv(tensor_in, filters=32, stride=None, kernel_size=3, pad='SAME', group=1,
 
 
 benchlist = [\
-    #'AlexNet', \
-    #'SVHN', \
-    #'CIFAR10', \
+    'AlexNet', \
+    # 'SVHN', \
+    # 'CIFAR10', \
     #'LeNet-5', \
     #'VGG-7', \
     #'RESNET-18-twn', \
@@ -81,7 +81,7 @@ benchlist = [\
 
 try:
     import bitfusion.src.benchmarks.layer as layer
-    benchlist += layer.get_benchlist(1) # todo index
+    # benchlist += layer.get_benchlist(1) # todo index
     print("benchlist length is %d in benchmarks.py" % len(benchlist))
 except (NameError, IOError) as e:
     print("layer.py import error", e)

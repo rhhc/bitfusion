@@ -8,8 +8,7 @@ BaseEnergyTuple = namedtuple('BaseEnergyTuple',
          'ibuf_write_energy',
          'obuf_read_energy',
          'obuf_write_energy',
-        ],
-        verbose=False)
+        ])
 
 class EnergyTuple(BaseEnergyTuple):
     def __str__(self):
