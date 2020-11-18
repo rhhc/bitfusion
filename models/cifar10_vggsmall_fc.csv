@@ -1,0 +1,2 @@
+arch,layer,IC,OC
+cifar10_vggsmall,classifier,8192,10

@@ -7,3 +7,4 @@ bitfusion.egg-info
 *.pyc
 *.swp
 .python-version
+__pychche__

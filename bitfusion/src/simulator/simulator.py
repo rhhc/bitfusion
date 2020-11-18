@@ -407,13 +407,20 @@ class Simulator(object):
     def get_conv_cycles(self, K, O, S, IC, OC, iprec, wprec, batch_size=1, im2col=False):
         """
         Get number of cycles required for Convolution layer.
-
+        params:
+            K: kernel_size
+            O: output height or width
+            S: stride
+            IC: input channel
+            OC: output channel
+            iprec: input bitwidth (2,8)
+            wprec: weight bitwidth (2,8)
         description:
             This functions does an exhaustive search for finding the optimal
             Tiling and Ordering parameters
         """
         B = batch_size
-        I = (O - 1) * S + K
+        I = (O - 1) * S + K # input height or width
 
         # We do not tile the "K" dimension and compute an entire 2-D conv at a
         # time

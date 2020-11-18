@@ -1,0 +1,4 @@
+arch,layer,IC,OC
+alexnet,classifier.1,9216,4096
+alexnet,classifier.4,4096,4096
+alexnet,classifier.6,4096,1000

@@ -1,0 +1,4 @@
+arch,layer,IC,OC
+vgg11,classifier.0,25088,4096
+vgg11,classifier.3,4096,4096
+vgg11,classifier.6,4096,1000

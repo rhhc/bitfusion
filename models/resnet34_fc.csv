@@ -1,0 +1,2 @@
+arch,layer,IC,OC
+resnet34,fc,512,1000

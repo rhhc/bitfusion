@@ -1,0 +1,6 @@
+arch,layer,K,O,S,IC,OC
+alexnet,features.0,11,55,4,3,64
+alexnet,features.3,5,27,1,64,192
+alexnet,features.6,3,13,1,192,384
+alexnet,features.8,3,13,1,384,256
+alexnet,features.10,3,13,1,256,256
