@@ -377,11 +377,13 @@ def get_loop_instructions(conv_params, tiling, order_type):
 
     # Skip if overutilizing resources (consider double buffering)
     if wgt_read_size > acc_obj.sram['wgt'] * 8 / 2.0:
-        print('error')
+        print('wgt sram error')
         return
     if act_read_size > acc_obj.sram['act'] * 8 / 2.0:
+        print('act sram error')
         return
     if out_read_size > acc_obj.sram['out'] * 8 / 2.0:
+        print('out sram error')
         return
 
     # Skip tiling if underutilizing resources

@@ -6,9 +6,11 @@ See bitfusion-generate-graphs.ipynb for details on how to use the simulator.
  
 ```bash
  git clone --recursive https://github.com/rhhc/bitfusion.git
- cd bitfusion/bitfusion/sram/cacti
- make all -j32
- cd ../../..
+ cd bitfusion
+#  git submodule update --init --recursive
+#  cd bitfusion/sram/cacti
+#  make all -j32
+#  cd ../../..
  pip install -r requirements.txt
 ```
 
